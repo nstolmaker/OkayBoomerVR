@@ -3461,7 +3461,7 @@ MonoBehaviour:
   perfectDistanceAllowedVariancePercent: 0.25
   director: {fileID: 0}
   audioClip: {fileID: 8300000, guid: 11c800ce5b57cdb49b3a22fc56c45b27, type: 3}
-  soundEffectDebounce: 0.25
+  soundEffectDebounce: 2.25
 --- !u!1001 &1170604341
 PrefabInstance:
   m_ObjectHideFlags: 0
