@@ -113,7 +113,8 @@ public class SoundConeManager : MonoBehaviour
     public void PerfectPositionHit(GameObject whichMic, GameObject whichTalker)
     {
         // if they've got the perfect position, and they're actively holding the mic, let them know.
-        if (microphonePickup.GetComponent<Mic>().isBeingHeld)
+        Debug.Log("Perfect position hit! Mic was: " + whichMic.name + ". Talker was :" + whichTalker.name);
+        if (whichMic.GetComponentInParent<Mic>().isBeingHeld)
         {
             // make sure we don't play it too often.
             if (checkSoundEffectDebounce())
