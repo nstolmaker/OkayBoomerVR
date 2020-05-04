@@ -22,8 +22,6 @@ public class SoundManager : MonoBehaviour
      * Also having a single game object that can manage audio state is useful since audio is tricky
      * */
 
-    /* to add a new sound effect, you have to add it in SoundEffects.cs, and also like 4 places in this file. I've marked all the places with // %%% */
-
 
     // internal variables
     [SerializeField][Tooltip("Used internally.")]
@@ -35,7 +33,14 @@ public class SoundManager : MonoBehaviour
 
 
     // set these publicly
-    // %%%
+    [Tooltip("Set automagically. Audiosource we will attach to the director probably. Maybe should be in another script or just set in the editor.")]
+    private AudioSource soundSource;
+    [Tooltip("Used internally to determine the last time a sound effect was played. See soundEffectDebounce")]
+    private float soundEffectDebounceLastTime;
+    [Tooltip("Min time to wait before playing a sound effect again")]
+    public float soundEffectDebounce = 0.75f;
+    // %%% Audio Clip Definitions. Add to these.
+    /* to add a new sound effect, you have to add it in SoundEffects.cs, and also like 4 places in this file. I've marked all the places with // %%% */
     public AudioClip PickupMic;
     public AudioClip DropMic;
     public AudioClip Action;
@@ -108,7 +113,7 @@ public class SoundManager : MonoBehaviour
         controller.GetHoverTargets(hoverTargets);
         foreach (XRBaseInteractable target in hoverTargets)
         {
-            Debug.Log("hoverTarget: " + target.name);
+            //Debug.Log("hoverTarget: " + target.name);
             SoundEffects objectSFX = target?.GetComponent<SoundEffects>() ?? null;
 
             // %%%
@@ -135,7 +140,7 @@ public class SoundManager : MonoBehaviour
             {
                 if (item)
                 {
-                    Debug.Log("onHoverExit: " + item.gameObject.name);
+                    //Debug.Log("onHoverExit: " + item.gameObject.name);
                     QueSound(hoverSound);
                     controller.onHoverEnter.RemoveAllListeners();
                     controller.onHoverExit.RemoveAllListeners();
@@ -149,7 +154,7 @@ public class SoundManager : MonoBehaviour
             {
                 if (item)
                 {
-                    Debug.Log("onHoverEnter: " + item.gameObject.name);
+                    //Debug.Log("onHoverEnter: " + item.gameObject.name);
                     QueSound(hoverSound);
                 }
                 else
@@ -161,7 +166,7 @@ public class SoundManager : MonoBehaviour
             {
                 if (item)
                 {
-                    Debug.Log("onSelectEnter item " + item.gameObject.name);
+                    //Debug.Log("onSelectEnter item " + item.gameObject.name);
                     QueSound(pickupSound);
                 } else
                 {
@@ -172,7 +177,7 @@ public class SoundManager : MonoBehaviour
             {
                 if (item)
                 {
-                    Debug.Log("onSelectExit: " + item.gameObject.name);
+                    //Debug.Log("onSelectExit: " + item.gameObject.name);
                     QueSound(dropSound);
                     controller.onHoverEnter.RemoveAllListeners();
                     controller.onHoverExit.RemoveAllListeners();
@@ -186,6 +191,18 @@ public class SoundManager : MonoBehaviour
             });
         }
 
-    } 
+    }
 
+
+    // kind of a utility class. Should probably put this in the SoundManager when I do that migration.
+    public bool CheckSoundEffectDebounce()
+    {
+        // if the current time is greater than the last time we played a sound + the defined minimum sound interval, then...
+        if (Time.time > soundEffectDebounceLastTime + soundEffectDebounce)
+        {
+            soundEffectDebounceLastTime = Time.time;
+            return true;
+        }
+        return false;
+    }
 }
