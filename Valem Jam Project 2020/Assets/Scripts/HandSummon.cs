@@ -22,6 +22,12 @@ public class HandSummon : MonoBehaviour
     public Vector3 l_handCenter;
     [SerializeField]
     public Vector3 r_handCenter;
+    [SerializeField]
+    private bool leftHandIn = false;
+    [SerializeField]
+    private bool rightHandIn = false;
+    [SerializeField]
+    private float debounceLastTime = 0;
 
     public void Start()
     {
@@ -61,5 +67,64 @@ public class HandSummon : MonoBehaviour
         Vector3 newSummonBoxPosition = new Vector3(xrRig.transform.position.x, xrRig.transform.position.y+0.575f, xrRig.transform.position.z+0.4f);
         transform.position = newSummonBoxPosition;
         */
+        if (rightHandIn && leftHandIn)
+        {
+            if (Debounce(1f))
+            {
+                gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                Debug.Log("Woohoo!");
+                SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+                soundManager.QueSound(SFX.Sounds.Correct);
+            }
+        } else
+        {
+
+        }
     }
+
+    // kind of a utility class. Should probably put this somewhere with utils
+    public bool Debounce(float debounceTime)
+    {
+
+        // if the current time is greater than the last time we played a sound + the defined minimum sound interval, then...
+        if (Time.time > debounceLastTime + debounceTime)
+        {
+            debounceLastTime = Time.time;
+            return true;
+        }
+        return false;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        GameObject hitByParent = other.GetComponent<Transform>().parent.gameObject;  // :-O
+        Debug.Log("HandSummon::onTriggerEnter:" + hitByParent.name);
+        if (hitByParent.name == l_hand.gameObject.name)
+        {
+            // left hand triggered by entering the summon area
+            leftHandIn = true;
+        }
+        if (hitByParent.name == r_hand.gameObject.name)
+        {
+            // right hand triggered by entering the summon area
+            rightHandIn = true;
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        GameObject hitByParent = other.GetComponent<Transform>().parent.gameObject;  // :-O
+        Debug.Log("HandSummon::OnTriggerExit:" + hitByParent.name);
+        if (hitByParent.name == l_hand.gameObject.name)
+        {
+            // left hand triggered by entering the summon area
+            leftHandIn = false;
+        }
+        if (hitByParent.name == r_hand.gameObject.name)
+        {
+            // right hand triggered by entering the summon area
+            rightHandIn = false;
+        }
+    }
+
 }
