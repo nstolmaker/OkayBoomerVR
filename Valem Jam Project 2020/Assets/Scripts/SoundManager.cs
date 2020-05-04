@@ -25,26 +25,29 @@ public class SoundManager : MonoBehaviour
     /* to add a new sound effect, you have to add it in SoundEffects.cs, and also like 4 places in this file. I've marked all the places with // %%% */
 
 
-// internal variables
-[SerializeField][Tooltip("Used internally.")]
-private AudioSource audioSource;
-[SerializeField][Tooltip("Used internally.")]
-private AudioClip audioClip;
-
-// set these publicly
-// %%%
-public AudioClip PickupMic;
-public AudioClip DropMic;
-public AudioClip Action;
-public AudioClip Cut;
-public AudioClip HoverGeneric;
-public AudioClip Correct;
+    // internal variables
+    [SerializeField][Tooltip("Used internally.")]
+    private AudioSource audioSource;
+    [SerializeField][Tooltip("Used internally.")]
+    private AudioClip audioClip;
+    [SerializeField][Tooltip("Used internally.")]
+    public List<XRBaseInteractable> hoverTargets;
 
 
+    // set these publicly
+    // %%%
+    public AudioClip PickupMic;
+    public AudioClip DropMic;
+    public AudioClip Action;
+    public AudioClip Cut;
+    public AudioClip HoverGeneric;
+    public AudioClip Correct;
 
-/* 
- * Use this function to play sounds. Right now it's not actually queueing them, but it's good to have a separation layer so we can do it later if we need
- */
+
+
+    /* 
+     * Use this function to play sounds. Right now it's not actually queueing them, but it's good to have a separation layer so we can do it later if we need
+     */
     public void QueSound(SFX.Sounds clipName)
     {
         AudioClip clip = null;
@@ -175,9 +178,19 @@ public AudioClip Correct;
         }
         else
         {
-            // they just dropped the item, so we can't pull data from it. It'll already have exit events bound to it though, so we can just assume those will handle it
-            // do nothing
-            Debug.Log("ResolveInteractionSounds with a null target. that means you dropped the object");
+            // okay it seems like this only happens when we are in a hover state, and therefor target is null.
+            // BUT, we should still not that the target is this object, lets test that thoery
+            Debug.Log("ResolveInteractionSounds with a null target. that means you dropped the object" + gameObject.name);
+            controller.GetHoverTargets(hoverTargets);
+            foreach (XRBaseInteractable hoverTarget in hoverTargets)
+            {
+                Debug.Log("hoverTarget: "+ hoverTarget.name);
+                SoundEffects targetSFX = hoverTarget.GetComponent<SoundEffects>() ?? null;
+                if (targetSFX != null)
+                {
+                    QueSound(targetSFX.hoverSound);
+                }
+            }
         }
 
         /*
