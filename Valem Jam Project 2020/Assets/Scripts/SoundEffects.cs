@@ -11,6 +11,12 @@ public class SoundEffects : MonoBehaviour
     public SFX.Sounds activateSound;
     public SFX.Sounds hoverSound;
     public SFX.Sounds correctSound;
+    public SFX.Sounds dialog1Sound;
+    public SFX.Sounds dialog2Sound;
+    public SFX.Sounds dialog3Sound;
+    public SFX.Sounds mumble1Sound;
+    public SFX.Sounds mumble2Sound;
+    public SFX.Sounds mumble3Sound;
 
 
 }

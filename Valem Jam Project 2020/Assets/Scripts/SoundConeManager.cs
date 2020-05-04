@@ -11,13 +11,12 @@ public class SoundConeManager : MonoBehaviour
     [SerializeField][Tooltip("Set automagically.")]
     private bool inTheConeZone = false;
     [SerializeField][Tooltip("Set automagically.")]
-    private Transform centerOfTheConeZone;
-    [SerializeField][Tooltip("Set automagically.")]
     private Transform microphonePickup;
     [SerializeField][Tooltip("Set automagically.")]
     private Ray rayFromMic;
     private SoundManager soundManager;
-
+    [Tooltip("Set automagically. Charactor id. Should be a unique integer. Automatically assigned by the SoundManager, as long as each SoundConeManager is in the character list on the SoundManager game object. If it's showing 999, you didn't link it correctly. This is how we keep track of the different 'goals', the audioTracks, etc. If you're having weird audio behavior,  make sure these ids are all different, and i think they need to be sequential.")]
+    public int charID = 999;
 
 
     // can be set manually, but have automatic values
@@ -27,8 +26,12 @@ public class SoundConeManager : MonoBehaviour
     public float perfectDistance = 0.2f;
     [Tooltip("Critical hit is perfectDistance +/- perfectDistanceAllowedVariancePercent")]
     public float perfectDistanceAllowedVariancePercent = 0.1f;
-    [Tooltip("Tell us where the director is, so that we can make sounds come from him")]
+    [Tooltip("DEPRECATED. I should move this. (Tell us where the director is, so that we can make sounds come from him)")]
     public GameObject director;
+    [Tooltip("The main audio track you'd like to play from this object")]
+    public SFX.Sounds primaryAudioTrack;
+    [Tooltip("The mumble track, to play when the object isnt properly mic'd")]
+    public SFX.Sounds mumbleAudioTrack;
 
 
     void Awake()
@@ -56,18 +59,19 @@ public class SoundConeManager : MonoBehaviour
         // let's determine how well they did at nailing the position.
         // the ideal position should be in the center of the waveform cone (ConeZone), pointing at the sound generator (TalkyTalky)
         // we just need to draw a triangle between these three points, and then look at the angles.
-        // Scratch that, that's too much work, let's just compare the transform rotations/positions of the michead and the center of the cone.
-        centerOfTheConeZone = transform;
+        // Scratch that, that's too much work, let's just compare the transform distance between the talkyTalky and the mic.
         microphonePickup = collidingWith.transform;
-        // NOTE: We could add rotation here as well, but at the moment I think we only care about rotation along two of the three axis
+        // NOTE: We could add rotation here as well, but at the moment I think we only care about rotation along two of the three axis, and also it might be too hard.
         rayFromMic = new Ray(microphonePickup.position, microphonePickup.forward);
         inTheConeZone = true;
+        PlayPrimaryAudio(); // switches the audio track to the correct one.
 
     }
 
     public void OnTriggerExit(Collider collider)
     {
         inTheConeZone = false;
+        Mumble(); // outside the cone it sounds like mumbling
     }
 
     void Update()
@@ -76,6 +80,20 @@ public class SoundConeManager : MonoBehaviour
         {
             CheckIfRayCastHit();
         }
+    }
+
+    public void PlayPrimaryAudio()
+    {
+        // play the primary audio track
+        Debug.Log("SoundConeManager::PlayPrimaryAudio => soundManager.SetCharacterAudio(" + this.charID + ", primaryAudioTrack: "+ primaryAudioTrack.ToString()+")");
+        soundManager.SetCharacterAudio(this.charID, primaryAudioTrack);
+    }
+
+    public void Mumble()
+    {
+        // play the mumble audio track
+        Debug.Log("SoundConeManager::Mumble => soundManager.SetCharacterAudio(" + this.charID + ", mumbleAudioTrack: "+ mumbleAudioTrack.ToString()+")");
+        soundManager.SetCharacterAudio(this.charID, mumbleAudioTrack);
     }
 
     public void CheckIfRayCastHit()
