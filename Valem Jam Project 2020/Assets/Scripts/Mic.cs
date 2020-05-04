@@ -17,8 +17,8 @@ public class Mic : XRBaseInteractable
         {
             interactable = GetComponent<XRGrabInteractable>();
         }
-        interactable.onSelectEnter.RemoveAllListeners();
-        interactable.onSelectExit.RemoveAllListeners();
+        interactable.onSelectEnter.RemoveListener(DidGetSelected);
+        interactable.onSelectExit.RemoveListener(DidLoseSelected);
         interactable.onSelectEnter.AddListener(DidGetSelected);
         interactable.onSelectExit.AddListener(DidLoseSelected);
 
@@ -33,7 +33,6 @@ public class Mic : XRBaseInteractable
 
         if (controller.gameObject.name == "RightHand Controller")
         {
-            Debug.Log("Yep, with the RightHand Controller!");
             isBeingHeld = true;
         }
     }

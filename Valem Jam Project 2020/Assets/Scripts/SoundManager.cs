@@ -100,11 +100,16 @@ public class SoundManager : MonoBehaviour
     public void ResolveInteractionSounds(XRBaseInteractor controller)
     {
 
-        XRBaseInteractable target = controller?.selectTarget ?? null;
-        if (target != null) {
+        // this stuff whole function doesn't get called until after the event handlers have already been done, 
+        // so for hover, we have to check if it's happening right now. At that point we might as well bind the events
+
+        // okay it seems like this only happens when we are in a hover state, and therefor target is null.
+
+        controller.GetHoverTargets(hoverTargets);
+        foreach (XRBaseInteractable target in hoverTargets)
+        {
+            Debug.Log("hoverTarget: " + target.name);
             SoundEffects objectSFX = target?.GetComponent<SoundEffects>() ?? null;
-            // they just started, or are still holding something, so we can use the target
-            //Debug.Log("Called ResolveInteractionSounds on : " + target.gameObject.name);
 
             // %%%
             SFX.Sounds pickupSound = objectSFX.pickupSound;
@@ -113,6 +118,13 @@ public class SoundManager : MonoBehaviour
             SFX.Sounds hoverSound = objectSFX.hoverSound;
             SFX.Sounds correctSound = objectSFX.correctSound;
 
+            // we are hovering, so play the hover sound.
+            if (objectSFX != null)
+            {
+                QueSound(objectSFX.hoverSound);
+            }
+         
+            // now bind the rest of the sounds to this object that's currently hovered.
             controller.onHoverEnter.RemoveAllListeners();
             controller.onHoverExit.RemoveAllListeners();
             controller.onSelectEnter.RemoveAllListeners();
@@ -125,6 +137,8 @@ public class SoundManager : MonoBehaviour
                 {
                     Debug.Log("onHoverExit: " + item.gameObject.name);
                     QueSound(hoverSound);
+                    controller.onHoverEnter.RemoveAllListeners();
+                    controller.onHoverExit.RemoveAllListeners();
                 }
                 else
                 {
@@ -160,64 +174,18 @@ public class SoundManager : MonoBehaviour
                 {
                     Debug.Log("onSelectExit: " + item.gameObject.name);
                     QueSound(dropSound);
+                    controller.onHoverEnter.RemoveAllListeners();
+                    controller.onHoverExit.RemoveAllListeners();
+                    controller.onSelectEnter.RemoveAllListeners();
+                    controller.onSelectExit.RemoveAllListeners();
                 }
                 else
                 {
                     Debug.Log("onSelectExit of unknown item ");
                 }
             });
-
-            // this stuff doesn't get called until after the event handlers have already been done, so we have to check if it's happening right now
-            // but also bind the one for exit, because on exit there is no destination object.
-            if (controller.selectTarget.isHovered)
-            {
-                Debug.Log("controller.selectTarget.isHovered: " + controller.selectTarget.gameObject.name);
-                QueSound(hoverSound);
-            }
-
-        }
-        else
-        {
-            // okay it seems like this only happens when we are in a hover state, and therefor target is null.
-            // BUT, we should still not that the target is this object, lets test that thoery
-            Debug.Log("ResolveInteractionSounds with a null target. that means you dropped the object" + gameObject.name);
-            controller.GetHoverTargets(hoverTargets);
-            foreach (XRBaseInteractable hoverTarget in hoverTargets)
-            {
-                Debug.Log("hoverTarget: "+ hoverTarget.name);
-                SoundEffects targetSFX = hoverTarget.GetComponent<SoundEffects>() ?? null;
-                if (targetSFX != null)
-                {
-                    QueSound(targetSFX.hoverSound);
-                }
-            }
         }
 
-        /*
-        Debug.Log("Resolving interaction sounds for target: " + target.name);
-        if (controller.isSelectActive)
-        {
-            Debug.Log("controller.isSelectActive: " + controller.isSelectActive);
-            controller.onSelectExit.AddListener((XRBaseInteractable item) =>
-            {
-                Debug.Log("Dropping item: " + item.gameObject.name);
-            });
-        }
-        /*
-        if (controller.isHoverActive)
-        {
-            Debug.Log("controller.isHoverActive: " + controller.isSelectActive);
-            controller.onHoverExit.AddListener(DropItem);
-        }
-        */
-    }
-     
-    /*
-    public void HoverOffItem(XRBaseInteractable item)
-    {
-        Debug.Log("HoverOffItem: " + gameObject.name);
-
-    }
-    */
+    } 
 
 }
