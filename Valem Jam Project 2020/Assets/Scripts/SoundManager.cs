@@ -10,7 +10,9 @@ public class SFX
 {
     public enum Sounds
     {
-        PickupMic, DropMic, Action, Cut, HoverGeneric, Correct
+        PickupMic, DropMic, Action, Cut, HoverGeneric, Correct,
+        Dialog1, Dialog2, Dialog3,
+        Mumble1, Mumble2, Mumble3
     };
 }
 public class SoundManager : MonoBehaviour
@@ -31,14 +33,16 @@ public class SoundManager : MonoBehaviour
     [SerializeField][Tooltip("Used internally.")]
     public List<XRBaseInteractable> hoverTargets;
 
-
     // set these publicly
+    [Tooltip("IMPORTANT! This is where we link up all the ConeZones for our characters. Increase the size to the number of 'talkers' you have, make sure they have SoundConeManager components on them, and then drag them into here to link them.")]
+    public List<SoundConeManager> characters;
     [Tooltip("Set automagically. Audiosource we will attach to the director probably. Maybe should be in another script or just set in the editor.")]
     private AudioSource soundSource;
     [Tooltip("Used internally to determine the last time a sound effect was played. See soundEffectDebounce")]
     private float soundEffectDebounceLastTime;
     [Tooltip("Min time to wait before playing a sound effect again")]
     public float soundEffectDebounce = 0.75f;
+
     // %%% Audio Clip Definitions. Add to these.
     /* to add a new sound effect, you have to add it in SoundEffects.cs, and also like 4 places in this file. I've marked all the places with // %%% */
     public AudioClip PickupMic;
@@ -47,13 +51,38 @@ public class SoundManager : MonoBehaviour
     public AudioClip Cut;
     public AudioClip HoverGeneric;
     public AudioClip Correct;
+    public AudioClip Dialog1;
+    public AudioClip Mumble1;
+    public AudioClip Dialog2;
+    public AudioClip Mumble2;
+    public AudioClip Dialog3;
+    public AudioClip Mumble3;
 
 
+    public void Start()
+    {
+        // set the ids for characters that were defined
+        for (int i = 0; i < characters.Count; i++)
+        {
+            Debug.Log("Iterating over defined chars and settings ids" + i);
+            characters[i].charID = i;
+            characters[i].Mumble(); // start mumbling here, otherwise if the object starts itself sometimes it happens before it has an index and errors.
+        }
+    }
 
     /* 
      * Use this function to play sounds. Right now it's not actually queueing them, but it's good to have a separation layer so we can do it later if we need
      */
     public void QueSound(SFX.Sounds clipName)
+    {
+        AudioClip resolvedAudioClip = ResolveSoundToClip(clipName);
+        if (resolvedAudioClip)
+        {
+            PlaySoundEffect(resolvedAudioClip);
+        }
+    }
+
+    public AudioClip ResolveSoundToClip(SFX.Sounds clipName)
     {
         AudioClip clip = null;
         // %%%
@@ -77,10 +106,77 @@ public class SoundManager : MonoBehaviour
             case SFX.Sounds.Correct:
                 clip = this.Correct;
                 break;
+            case SFX.Sounds.Dialog1:
+                clip = this.Dialog1;
+                break;
+            case SFX.Sounds.Dialog2:
+                clip = this.Dialog2;
+                break;
+            case SFX.Sounds.Dialog3:
+                clip = this.Dialog3;
+                break;
+            case SFX.Sounds.Mumble1:
+                clip = this.Mumble1;
+                break;
+            case SFX.Sounds.Mumble2:
+                clip = this.Mumble2;
+                break;
+            case SFX.Sounds.Mumble3:
+                clip = this.Mumble3;
+                break;
         }
         if (clip)
         {
-            PlaySoundEffect(clip);
+            return clip;
+        }
+        return null;
+    }
+
+    public void SetCharacterAudio(int charID, SFX.Sounds clipName)
+    {
+        AudioClip resolvedAudioClip = ResolveSoundToClip(clipName);
+        // as long as it returns something
+        if (resolvedAudioClip)
+        {
+            Debug.Log("SetCharacterAudio| resolvedAudioClip successfully");
+            // ensure the char exists
+            if (characters[charID])
+            {
+                Debug.Log("SetCharacterAudio| characters["+charID+"] exists");
+                // the array is called characters, but it's actually an array of SoundConeManager's. So, we have to get the component that actually is making the sound, which is defined as it's talkyTalky gameObject.
+                // The talkyTalky is usually an invisible sphere at the charactors mouth. Find that, and then get it's audioSource, which plays the sound.
+                AudioSource charAudioSource = characters[charID].talkyTalky?.gameObject.GetComponent<AudioSource>();
+                if (!charAudioSource) 
+                {
+                    // NO audio source yet exists. make one
+                    characters[charID].talkyTalky.gameObject.AddComponent<AudioSource>();
+                    charAudioSource.loop = true;
+                    charAudioSource.playOnAwake = true;
+                    charAudioSource.spatialBlend = 1;
+                    charAudioSource.spread = 212;
+                    charAudioSource.rolloffMode = AudioRolloffMode.Logarithmic; // cant set this to custom with scripting, so i guess we'll have to make sure we make these manually.
+                    Debug.LogWarning("WARNING: Creating a new audio source with Logarithmic rollof on gameobject (" + characters[charID].talkyTalky.gameObject.name + ") because there isnt one. However, we cant set the volume rollOf mode in code, so you're better of making an audioSource on the talkyTalky yourself. ");
+                }
+                // set the audio Clip the defined clip.
+                Debug.Log("SetCharacterAudio| setting charAudioSource to resolvedAudioClip: "+resolvedAudioClip.name + "(clipName: "+ clipName.ToString()+ ")");
+                if (charAudioSource.isPlaying)
+                {
+                    float trackPosition = charAudioSource.time;
+                    Debug.Log("SetCharacterAudio| already playing, so saving track position of " + trackPosition.ToString());
+                    charAudioSource.clip = resolvedAudioClip;
+                    charAudioSource.time = trackPosition;
+                    charAudioSource.Play();
+                } else
+                {
+                    // not playing, so just load it up and hit play.
+                    charAudioSource.clip = resolvedAudioClip;
+                    charAudioSource.Play();
+                }
+
+            } else
+            {
+                Debug.Log("Error in SoundManager.cs: Char with id " + charID + " not found.");
+            }
         }
     }
 
@@ -122,6 +218,12 @@ public class SoundManager : MonoBehaviour
             SFX.Sounds activateSound = objectSFX.activateSound;
             SFX.Sounds hoverSound = objectSFX.hoverSound;
             SFX.Sounds correctSound = objectSFX.correctSound;
+            SFX.Sounds dialog1Sound = objectSFX.dialog1Sound;
+            SFX.Sounds dialog2Sound = objectSFX.dialog2Sound;
+            SFX.Sounds dialog3Sound = objectSFX.dialog3Sound;
+            SFX.Sounds mumble1Sound = objectSFX.mumble1Sound;
+            SFX.Sounds mumble2Sound = objectSFX.mumble2Sound;
+            SFX.Sounds mumble3Sound = objectSFX.mumble3Sound;
 
             // we are hovering, so play the hover sound.
             if (objectSFX != null)

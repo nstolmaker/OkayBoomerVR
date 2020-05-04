@@ -26,15 +26,9 @@ public class Mic : XRBaseInteractable
 
     public void DidGetSelected(XRBaseInteractor interactor)
     {
-        Debug.Log("Mic selected?");
         var controller = interactor.GetComponent<XRController>();
         XRBaseInteractable remote = interactor.selectTarget;
-
-
-        if (controller.gameObject.name == "RightHand Controller")
-        {
-            isBeingHeld = true;
-        }
+        isBeingHeld = true;
     }
 
     public void DidLoseSelected(XRBaseInteractor interactor)
