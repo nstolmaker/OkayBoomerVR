@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class HandSummon : MonoBehaviour
@@ -21,14 +23,18 @@ public class HandSummon : MonoBehaviour
     private XRRig xrRig;
     [Tooltip("The colliders that you must slide yours hands to, in order to summon")][SerializeField]
     private List<Collider> endCapColliders = null;
+    [Tooltip("The intensity of the vibrations triggered with hand summoning")][SerializeField]
+    private float hapticIntensity = 0.2f;
+    [Tooltip("Duration for fading when stuff fades")][SerializeField]
+    float lerpDuration = 3f;
 
     // used internally
+    [SerializeField][Tooltip("Used internally. dont touch")]
+    private List<XRController> xrControllers = null;    // basically the same as the other list, but these ones get set internally to the XRController component, which we often need for haptic pulses and stuff like that. Feels redundant.
     [SerializeField]
-    private bool leftHandIn = false;
+    private bool leftHandBegin = false;
     [SerializeField]
-    private bool rightHandIn = false;
-    [SerializeField]
-    private Vector2 slideAxis;  // used to make sure they're keeping their hands in line when doing the slide.
+    private bool rightHandBegin = false;
     [SerializeField]
     private bool leftHandDone = false;
     [SerializeField]
@@ -39,6 +45,14 @@ public class HandSummon : MonoBehaviour
     private bool step1 = false;
     [SerializeField]
     private bool step2 = false;
+    [SerializeField]
+    private float lerpStart = 0;
+    [SerializeField]
+    private bool errorIndicationHappening = false;
+    [SerializeField]
+    private bool instantiateIndicationHappening = false; 
+
+
 
     public void Start()
     {
@@ -54,14 +68,26 @@ public class HandSummon : MonoBehaviour
         if (!l_hand)
         {
             l_hand = GameObject.Find("LeftHand Controller").GetComponent<XRBaseControllerInteractor>() ?? null;
+            xrControllers.Add(l_hand.GetComponent<XRController>());
         }
         if (!r_hand)
         {
             r_hand = GameObject.Find("RightHand Controller").GetComponent<XRBaseControllerInteractor>() ?? null;
+            xrControllers.Add(r_hand.GetComponent<XRController>());
         }
         if (!l_hand || !r_hand)
         {
             Debug.LogError("Error in HandSummon.cs: Unable to find hands. Either define them manually by dragging your controllers to the l_hand and r_hand fields in the inspector, or name them LeftHand Controller and RightHand Controller so I can find them automagically.");
+        }
+
+        // ensure materials are defined
+        if (!errorMaterial)
+        {
+            Debug.LogError("HandSummon.cs | Missing material for errorMaterial! This is bad. You should set this in the SummonManager to a material");
+        }
+        if (!okMaterial)
+        {
+            Debug.LogError("HandSummon.cs | Missing material for okMaterial! This is bad. You should set this in the SummonManager to a material");
         }
 
         // make sure there are endCapColliders
@@ -86,9 +112,11 @@ public class HandSummon : MonoBehaviour
                 {
                     case "LeftHand Controller":
                         this.leftHandDone = true;
+                        other.transform.parent.GetComponent<XRBaseControllerInteractor>().SendHapticImpulse(hapticIntensity, 0.05f);
                         break;
                     case "RightHand Controller":
                         this.rightHandDone = true;
+                        other.transform.parent.GetComponent<XRBaseControllerInteractor>().SendHapticImpulse(hapticIntensity, 0.05f);
                         break;
                     default:
                         Debug.LogWarning("Warning in HandSummon.cs:EndcapCollisionStart triggered by gameobject trigger thats not LeftHand Controller or RightHand Controller. If summoning doesn't work, this could be a clue. If everything works fine, don't worry about it.");
@@ -114,11 +142,19 @@ public class HandSummon : MonoBehaviour
         }
     }
 
+    public void VibrateBothControllers(float intensity, float duration)
+    {
+        foreach (XRController device in xrControllers)
+        {
+            device.SendHapticImpulse(intensity, duration);
+        }
+    }
+
     public void Update()
     {
          
 
-        if (rightHandIn && leftHandIn)
+        if (rightHandBegin && leftHandBegin)
         {
             if (!step1)
             {
@@ -128,13 +164,24 @@ public class HandSummon : MonoBehaviour
                 // show them the thingy so they have some kind of visible cue
                 gameObject.GetComponent<MeshRenderer>().enabled = true;
                 gameObject.GetComponent<MeshRenderer>().material = okMaterial;
+                //gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
                 step1 = true;   // first step is to get both hands in
             }
-            if (HandsLeftXAxis()) {
-                ResetSummon();
+            if (HandsInsideBox()) {
+
+                if (Debounce(0.25f))
+                {
+                    VibrateBothControllers(0.5f, 0.25f);
+                }
+                /* if (gameObject.GetComponent<MeshRenderer>().material != okMaterial)
+                {
+                    gameObject.GetComponent<MeshRenderer>().material = okMaterial;
+                }
+                */
             } else
             {
-                gameObject.GetComponent<MeshRenderer>().material = okMaterial;
+                ResetSummon();
+                FlashRedThenHide();
             }
 
             // if their hands make it to the endCaps, then they've done it, and they should get an object.
@@ -142,12 +189,12 @@ public class HandSummon : MonoBehaviour
             {
                 // and we haven't celebrated yet
                 if (!step2) { 
-                    //gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
                     Debug.Log("Summoning Item!");
                     SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
                     soundManager.QueSound(SFX.Sounds.Correct);
                     step1 = false;
                     step2 = true;
+                    WarpInNewObject("mic1");
                 }
             }
 
@@ -160,6 +207,45 @@ public class HandSummon : MonoBehaviour
 
         }
 
+        HandleTweeningIfNeeded();
+    }
+
+    public void HandleTweeningIfNeeded()
+    {
+        // this gets started by the FlashRedThenHide() function. One day there might be more than one tween here, so we'll want to break those out.
+        if (errorIndicationHappening)
+        {
+            var progress = Time.time - lerpStart;
+            var renderer = GetComponent<MeshRenderer>();
+            float newAlpha = Mathf.Lerp(lerpDuration, 0.0f, progress / lerpDuration);
+            errorMaterial.color = new Color(errorMaterial.color.r, errorMaterial.color.g, errorMaterial.color.b, newAlpha);
+            renderer.material = errorMaterial; //new Color(0, 0, 0, newAlpha);
+            Debug.Log("FlashRedThenHide running... " + newAlpha + ".");
+
+            if (lerpDuration < progress)
+            {
+                Debug.Log("FlashRedThenHide Done! ");
+                errorIndicationHappening = false;
+                //gameObject.GetComponent<MeshRenderer>().enabled = false;
+            }
+        }
+
+        // for warping in new objects
+        if (instantiateIndicationHappening)
+        {
+            // do the stuff like above, if we watn to.
+        }
+    }
+
+    public void WarpInNewObject(string objectName)
+    {
+        Debug.Log("Warping in new one!");
+        UnityEngine.Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Mic1.prefab", typeof(GameObject));
+        var rotationForHands = Quaternion.Euler(293.188843f, 90.5345764f, 269.418457f);
+        GameObject newMic = Instantiate(prefab, GetComponent<Renderer>().bounds.center, rotationForHands) as GameObject;
+        instantiateIndicationHappening = true;
+        //newMic.SetActive(true);
+
     }
 
     public void ResetSummon()
@@ -168,14 +254,24 @@ public class HandSummon : MonoBehaviour
         Debug.Log("ResetSummon");
         SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         soundManager.QueSound(SFX.Sounds.DropMic);
-        gameObject.GetComponent<MeshRenderer>().material = errorMaterial;
-        rightHandIn = false;
-        leftHandIn = false;
+        rightHandBegin = false;
+        leftHandBegin = false;
         rightHandDone = false;
         leftHandDone = false;
         step1 = false;
         step2 = false;
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    public void FlashRedThenHide()
+    {
+        lerpStart = Time.time;
+        errorIndicationHappening = true;
+    }
+
+    public void FancyWarpIn()
+    {
+        lerpStart = Time.time;
+        instantiateIndicationHappening = true;
     }
 
     // kind of a utility class. Should probably put this somewhere with utils
@@ -198,13 +294,18 @@ public class HandSummon : MonoBehaviour
         if (hitByParent.name == l_hand.gameObject.name)
         {
             // left hand triggered by entering the summon area
-            leftHandIn = true;
+            if (HoldingBothGrips()) { 
+                leftHandBegin = true;
+            }
         }
         if (hitByParent.name == r_hand.gameObject.name)
         {
             // right hand triggered by entering the summon area
-            rightHandIn = true;
-            // TODO: make sure their trigger buttons are down before doing this.
+            if (HoldingBothGrips())
+            {
+                rightHandBegin = true;
+            }
+            // TODO: Check rotation of hands as well. Left hand would be Vector3(339.273499, 277.711548, 98.3878937)
         }
     }
 
@@ -228,16 +329,41 @@ public class HandSummon : MonoBehaviour
 
     public bool HandsInsideBox()
     {
+        var handsInBox = 0;
         Renderer rend = GetComponent<Renderer>();
-        Vector3 center = rend.bounds.center;
-        float radius = rend.bounds.extents.magnitude;
+        if (rend.bounds.Contains(l_hand.transform.position))
+        {
+            //Debug.Log("HandsInsideBox | Lefthand is in the box");
+            handsInBox++;
+        }
+        if (rend.bounds.Contains(r_hand.transform.position))
+        {
+            //Debug.Log("HandsInsideBox | Right hand is in the box");
+            handsInBox++;
+        }
 
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(center, radius);
-
-        //first check the left hand
-        return false;
+        return handsInBox > 0;
     }
+
+    public bool HoldingBothGrips()
+    {
+        var gripsBeingHeld = 0;
+        foreach (XRController controller in xrControllers)
+        {
+            if (controller.inputDevice.TryGetFeatureValue(CommonUsages.grip, out float grip))
+            {
+                if (grip > 0.1)
+                {
+                    gripsBeingHeld++;
+                }
+            }
+        }
+        
+        return gripsBeingHeld == 2;
+    }
+
+    /* Cool stuff that i'm not using anymore. maybe move the fuzzy thing to a util. maybe not */
+    /*
     public bool HandsLeftXAxis()
     {
         // prepare fuzzyNumbers, because exact axis numbers are impossible.
@@ -269,5 +395,6 @@ public class HandSummon : MonoBehaviour
         float max = input + variance;
         return (min, max);
     }
+    */
 
 }
