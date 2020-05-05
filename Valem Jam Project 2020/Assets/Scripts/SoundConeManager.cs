@@ -85,14 +85,14 @@ public class SoundConeManager : MonoBehaviour
     public void PlayPrimaryAudio()
     {
         // play the primary audio track
-        Debug.Log("SoundConeManager::PlayPrimaryAudio => soundManager.SetCharacterAudio(" + this.charID + ", primaryAudioTrack: "+ primaryAudioTrack.ToString()+")");
+        //Debug.Log("SoundConeManager::PlayPrimaryAudio => soundManager.SetCharacterAudio(" + this.charID + ", primaryAudioTrack: "+ primaryAudioTrack.ToString()+")");
         soundManager.SetCharacterAudio(this.charID, primaryAudioTrack);
     }
 
     public void Mumble()
     {
         // play the mumble audio track
-        Debug.Log("SoundConeManager::Mumble => soundManager.SetCharacterAudio(" + this.charID + ", mumbleAudioTrack: "+ mumbleAudioTrack.ToString()+")");
+        //Debug.Log("SoundConeManager::Mumble => soundManager.SetCharacterAudio(" + this.charID + ", mumbleAudioTrack: "+ mumbleAudioTrack.ToString()+")");
         soundManager.SetCharacterAudio(this.charID, mumbleAudioTrack);
     }
 
