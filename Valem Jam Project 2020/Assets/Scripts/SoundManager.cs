@@ -64,7 +64,7 @@ public class SoundManager : MonoBehaviour
         // set the ids for characters that were defined
         for (int i = 0; i < characters.Count; i++)
         {
-            Debug.Log("Iterating over defined chars and settings ids" + i);
+            //Debug.Log("Iterating over defined chars and settings ids: " + i);
             characters[i].charID = i;
             characters[i].Mumble(); // start mumbling here, otherwise if the object starts itself sometimes it happens before it has an index and errors.
         }
