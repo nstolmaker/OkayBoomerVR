@@ -64,7 +64,7 @@ public class SoundManager : MonoBehaviour
         // set the ids for characters that were defined
         for (int i = 0; i < characters.Count; i++)
         {
-            Debug.Log("Iterating over defined chars and settings ids" + i);
+            //Debug.Log("Iterating over defined chars and settings ids: " + i);
             characters[i].charID = i;
             characters[i].Mumble(); // start mumbling here, otherwise if the object starts itself sometimes it happens before it has an index and errors.
         }
@@ -141,11 +141,11 @@ public class SoundManager : MonoBehaviour
         // as long as it returns something
         if (resolvedAudioClip)
         {
-            Debug.Log("SetCharacterAudio| resolvedAudioClip successfully");
+            //Debug.Log("SetCharacterAudio| resolvedAudioClip successfully");
             // ensure the char exists
             if (characters[charID])
             {
-                Debug.Log("SetCharacterAudio| characters["+charID+"] exists");
+                //Debug.Log("SetCharacterAudio| characters["+charID+"] exists");
                 // the array is called characters, but it's actually an array of SoundConeManager's. So, we have to get the component that actually is making the sound, which is defined as it's talkyTalky gameObject.
                 // The talkyTalky is usually an invisible sphere at the charactors mouth. Find that, and then get it's audioSource, which plays the sound.
                 AudioSource charAudioSource = characters[charID].talkyTalky?.gameObject.GetComponent<AudioSource>();
@@ -161,11 +161,11 @@ public class SoundManager : MonoBehaviour
                     Debug.LogWarning("WARNING: Creating a new audio source with Logarithmic rollof on gameobject (" + characters[charID].talkyTalky.gameObject.name + ") because there isnt one. However, we cant set the volume rollOf mode in code, so you're better of making an audioSource on the talkyTalky yourself. ");
                 }
                 // set the audio Clip the defined clip.
-                Debug.Log("SetCharacterAudio| setting charAudioSource to resolvedAudioClip: "+resolvedAudioClip.name + "(clipName: "+ clipName.ToString()+ ")");
+                //Debug.Log("SetCharacterAudio| setting charAudioSource to resolvedAudioClip: "+resolvedAudioClip.name + "(clipName: "+ clipName.ToString()+ ")");
                 if (charAudioSource.isPlaying)
                 {
                     float trackPosition = charAudioSource.time;
-                    Debug.Log("SetCharacterAudio| already playing, so saving track position of " + trackPosition.ToString());
+                    //Debug.Log("SetCharacterAudio| already playing, so saving track position of " + trackPosition.ToString());
                     charAudioSource.clip = resolvedAudioClip;
                     charAudioSource.time = trackPosition;
                     charAudioSource.Play();
