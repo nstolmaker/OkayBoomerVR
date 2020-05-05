@@ -93,7 +93,7 @@ public class HandSummon : MonoBehaviour
         // make sure there are endCapColliders
         if (endCapColliders.Count == 0)
         {
-            Debug.Log("No endcap colliders defined, so looking for and adding the expected ones by name 'EndCapLeft' and 'EndCapRight'");
+            //Debug.Log("No endcap colliders defined, so looking for and adding the expected ones by name 'EndCapLeft' and 'EndCapRight'");
             endCapColliders.Add(GameObject.Find("EndCapLeft").GetComponent<BoxCollider>());
             endCapColliders.Add(GameObject.Find("EndCapRight").GetComponent<BoxCollider>());
         }
@@ -103,11 +103,11 @@ public class HandSummon : MonoBehaviour
         }
         foreach (BoxCollider collider in endCapColliders)
         {
-            Debug.Log("Binding colliders for endcaps: " + collider.gameObject.name);
+            //Debug.Log("Binding colliders for endcaps: " + collider.gameObject.name);
             HandSummonEndCaps endcap = collider.GetComponent<HandSummonEndCaps>();
             // a nice little Lambda so we can bind events in this script instead of having to split this script up even more.
             endcap.EndcapCollisionStart += (GameObject other) => {
-                Debug.Log("EndcapCollisionStart triggered by: " + other.name);
+                //Debug.Log("EndcapCollisionStart triggered by: " + other.name);
                 switch (other.transform.parent.gameObject.name)
                 {
                     case "LeftHand Controller":
@@ -204,7 +204,7 @@ public class HandSummon : MonoBehaviour
         // It's basically it's own thing, and we no longer care where their hands are.
         if (step2)
         {
-
+            // TODO: allow sizing or selecting or something
         }
 
         HandleTweeningIfNeeded();
@@ -219,12 +219,12 @@ public class HandSummon : MonoBehaviour
             var renderer = GetComponent<MeshRenderer>();
             float newAlpha = Mathf.Lerp(lerpDuration, 0.0f, progress / lerpDuration);
             errorMaterial.color = new Color(errorMaterial.color.r, errorMaterial.color.g, errorMaterial.color.b, newAlpha);
-            renderer.material = errorMaterial; //new Color(0, 0, 0, newAlpha);
-            Debug.Log("FlashRedThenHide running... " + newAlpha + ".");
+            renderer.material = errorMaterial; 
+            //Debug.Log("FlashRedThenHide running... " + newAlpha + ".");
 
             if (lerpDuration < progress)
             {
-                Debug.Log("FlashRedThenHide Done! ");
+                //Debug.Log("FlashRedThenHide Done! ");
                 errorIndicationHappening = false;
                 //gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
@@ -241,19 +241,26 @@ public class HandSummon : MonoBehaviour
     {
         Debug.Log("Warping in new one!");
         UnityEngine.Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Mic1.prefab", typeof(GameObject));
-        var rotationForHands = Quaternion.Euler(293.188843f, 90.5345764f, 269.418457f);
-        GameObject newMic = Instantiate(prefab, GetComponent<Renderer>().bounds.center, rotationForHands) as GameObject;
+        var rotationForHands = Quaternion.Euler(90f, l_hand.transform.rotation.eulerAngles.y, 70f);
+        var positionForHands = r_hand.transform.position;
+        GameObject newMic = Instantiate(prefab, positionForHands, rotationForHands) as GameObject;
         instantiateIndicationHappening = true;
         //newMic.SetActive(true);
-
+        ResetSummon(true);
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        soundManager.QueSound(SFX.Sounds.Correct);
     }
 
-    public void ResetSummon()
+    public void ResetSummon(bool silent = false)
     {
         // they moved their hands too far outside of the allowed bounds while doing the gesture, so reset everything. TODO: make this a function.
         Debug.Log("ResetSummon");
-        SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-        soundManager.QueSound(SFX.Sounds.DropMic);
+        if (!silent)
+        {
+            SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+            soundManager.QueSound(SFX.Sounds.DropMic);
+        }
         rightHandBegin = false;
         leftHandBegin = false;
         rightHandDone = false;
@@ -290,7 +297,7 @@ public class HandSummon : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         GameObject hitByParent = other.GetComponent<Transform>().parent.gameObject;  // :-O
-        Debug.Log("HandSummon::onTriggerEnter:" + hitByParent.name);
+        //Debug.Log("HandSummon::onTriggerEnter:" + hitByParent.name);
         if (hitByParent.name == l_hand.gameObject.name)
         {
             // left hand triggered by entering the summon area
@@ -308,24 +315,7 @@ public class HandSummon : MonoBehaviour
             // TODO: Check rotation of hands as well. Left hand would be Vector3(339.273499, 277.711548, 98.3878937)
         }
     }
-
-    /* leaving this for reference, but now we're going to trigger the exit based on the vector2 of the hand position versus the summonbox posiion.
-    public void OnTriggerExit(Collider other)
-    {
-        GameObject hitByParent = other.GetComponent<Transform>().parent.gameObject;  // :-O
-        Debug.Log("HandSummon::OnTriggerExit:" + hitByParent.name);
-        if (hitByParent.name == l_hand.gameObject.name)
-        {
-            // left hand triggered by entering the summon area
-            leftHandIn = false;
-        }
-        if (hitByParent.name == r_hand.gameObject.name)
-        {
-            // right hand triggered by entering the summon area
-            rightHandIn = false;
-        }
-    }
-         * */
+ 
 
     public bool HandsInsideBox()
     {
@@ -361,40 +351,6 @@ public class HandSummon : MonoBehaviour
         
         return gripsBeingHeld == 2;
     }
-
-    /* Cool stuff that i'm not using anymore. maybe move the fuzzy thing to a util. maybe not */
-    /*
-    public bool HandsLeftXAxis()
-    {
-        // prepare fuzzyNumbers, because exact axis numbers are impossible.
-        float allowedVariance = 0.03f;
-        Vector3 boxAxis = transform.position;
-        (float, float) fuzzyNumbersY = FuzzNumber(boxAxis.y, allowedVariance);
-        (float, float) fuzzyNumbersZ = FuzzNumber(boxAxis.z, allowedVariance);
-        //Debug.Log("FuzzyNumbers returned: "+fuzzyNumbers.Item1+", "+fuzzyNumbers.Item2);
-
-        // make sure our y position is above the minimum and below the maximum allowed "fuzzyness"
-        if (l_hand.transform.position.y > fuzzyNumbersY.Item1 && l_hand.transform.position.y < fuzzyNumbersY.Item2)
-        {
-            //Debug.Log("l_hand We're in the sweet spot.");
-            return false;
-        }
-        if (r_hand.transform.position.y > fuzzyNumbersY.Item1 && r_hand.transform.position.y < fuzzyNumbersY.Item2)
-        {
-            //Debug.Log("r_hand We're in the sweet spot.");
-            return false;
-        }
-        // TODO: copy-paste for Z values and then test. Might make it too hard?
-        return true;
-    }
-
-    // Takes a number and returns an anonymous Tupple which are equal to the floor and the ceiling of that number, after applying the variance.
-    public (float, float) FuzzNumber(float input, float variance)
-    {
-        float min = input - variance;
-        float max = input + variance;
-        return (min, max);
-    }
-    */
+     
 
 }
