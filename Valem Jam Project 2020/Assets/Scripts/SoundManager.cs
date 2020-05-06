@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.Events;
 using System;
+using Assets.MultiAudioListener;
 
 [Serializable]
 public class SFX
@@ -26,8 +27,8 @@ public class SoundManager : MonoBehaviour
 
 
     // internal variables
-    [SerializeField][Tooltip("Used internally.")]
-    private AudioSource audioSource;
+    [SerializeField][Tooltip("Used internally.")] 
+    private MultiAudioSource audioSource;
     [SerializeField][Tooltip("Used internally.")]
     private AudioClip audioClip;
     [SerializeField][Tooltip("Used internally.")]
@@ -36,8 +37,6 @@ public class SoundManager : MonoBehaviour
     // set these publicly
     [Tooltip("IMPORTANT! This is where we link up all the ConeZones for our characters. Increase the size to the number of 'talkers' you have, make sure they have SoundConeManager components on them, and then drag them into here to link them.")]
     public List<SoundConeManager> characters;
-    [Tooltip("Set automagically. Audiosource we will attach to the director probably. Maybe should be in another script or just set in the editor.")]
-    private AudioSource soundSource;
     [Tooltip("Used internally to determine the last time a sound effect was played. See soundEffectDebounce")]
     private float soundEffectDebounceLastTime;
     [Tooltip("Min time to wait before playing a sound effect again")]
@@ -148,31 +147,35 @@ public class SoundManager : MonoBehaviour
                 //Debug.Log("SetCharacterAudio| characters["+charID+"] exists");
                 // the array is called characters, but it's actually an array of SoundConeManager's. So, we have to get the component that actually is making the sound, which is defined as it's talkyTalky gameObject.
                 // The talkyTalky is usually an invisible sphere at the charactors mouth. Find that, and then get it's audioSource, which plays the sound.
-                AudioSource charAudioSource = characters[charID].talkyTalky?.gameObject.GetComponent<AudioSource>();
+                MultiAudioSource charAudioSource = characters[charID].talkyTalky?.gameObject.GetComponent<MultiAudioSource>();
                 if (!charAudioSource) 
                 {
                     // NO audio source yet exists. make one
-                    characters[charID].talkyTalky.gameObject.AddComponent<AudioSource>();
-                    charAudioSource.loop = true;
-                    charAudioSource.playOnAwake = true;
-                    charAudioSource.spatialBlend = 1;
-                    charAudioSource.spread = 212;
-                    charAudioSource.rolloffMode = AudioRolloffMode.Logarithmic; // cant set this to custom with scripting, so i guess we'll have to make sure we make these manually.
+                    characters[charID].talkyTalky.gameObject.AddComponent<MultiAudioSource>();
+                    charAudioSource = characters[charID].talkyTalky.gameObject.GetComponent<MultiAudioSource>();
+                    charAudioSource.Loop = true;
+                    //charAudioSource.PlayOnAwake = true; *** testing
+                    //charAudioSource.SpatialBlend = 1; // needed for normal AudioSource but not necessary for MultiAudioSource, it's the default and only supported mode.
+                    charAudioSource.Spread = 212;
+                    charAudioSource.VolumeRolloff = AudioRolloffMode.Logarithmic; // cant set this to custom with scripting, so i guess we'll have to make sure we make these manually.
+                    charAudioSource.Play();
                     Debug.LogWarning("WARNING: Creating a new audio source with Logarithmic rollof on gameobject (" + characters[charID].talkyTalky.gameObject.name + ") because there isnt one. However, we cant set the volume rollOf mode in code, so you're better of making an audioSource on the talkyTalky yourself. ");
                 }
                 // set the audio Clip the defined clip.
                 //Debug.Log("SetCharacterAudio| setting charAudioSource to resolvedAudioClip: "+resolvedAudioClip.name + "(clipName: "+ clipName.ToString()+ ")");
-                if (charAudioSource.isPlaying)
+                if (charAudioSource.IsPlaying)
                 {
-                    float trackPosition = charAudioSource.time;
+                    // TODO: Add this back in when we have a working setup. IMPORTANT, but i'm debugging right now.
+                    //float trackPosition = charAudioSource.TimePosition;
                     //Debug.Log("SetCharacterAudio| already playing, so saving track position of " + trackPosition.ToString());
-                    charAudioSource.clip = resolvedAudioClip;
-                    charAudioSource.time = trackPosition;
-                    charAudioSource.Play();
+                    charAudioSource.AudioClip = resolvedAudioClip;
+                    //charAudioSource.TimePosition = trackPosition;
+                    Debug.Log("SoundManager.cs | charAudioSource is ALREADY Playing. Setting AudioClip and time position.");
                 } else
                 {
                     // not playing, so just load it up and hit play.
-                    charAudioSource.clip = resolvedAudioClip;
+                    charAudioSource.AudioClip = resolvedAudioClip;
+                    Debug.Log("SoundManager.cs | charAudioSource is Not Playing. Setting AudioClip and hitting play");
                     charAudioSource.Play();
                 }
 
@@ -185,17 +188,20 @@ public class SoundManager : MonoBehaviour
 
     private void PlaySoundEffect(AudioClip audioClip)
     {
-        if (audioSource = gameObject.GetComponent<AudioSource>())
+        if (audioSource = gameObject.GetComponent<MultiAudioSource>())
         {
-            audioSource.clip = audioClip;
-            audioSource.PlayOneShot(audioClip);
+            audioSource.AudioClip = audioClip;
+            // TODO: Re-implement PlayOneShot on the MultiAudioSource.
+            audioSource.Play();
+            audioSource.Loop = false;
         } else { 
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.loop = false;
-            audioSource.playOnAwake = false;
+            audioSource = gameObject.AddComponent<MultiAudioSource>();
+            audioSource.Loop = false;
+            audioSource.PlayOnAwake = false;
 
-            audioSource.clip = audioClip;
-            audioSource.PlayOneShot(audioClip);
+            audioSource.AudioClip = audioClip;
+            audioSource.Loop = false;
+            audioSource.Play();
         }
         
     }
