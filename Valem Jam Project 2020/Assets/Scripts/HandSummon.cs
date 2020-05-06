@@ -22,6 +22,7 @@ public class HandSummon : MonoBehaviour
     [Tooltip("Set automagically.")] 
     private XRRig xrRig;
     [Tooltip("The colliders that you must slide yours hands to, in order to summon")]
+    [SerializeField]
     private List<Collider> endCapColliders;
     [Tooltip("Set automagically. The game object to show when showing the tutorial. Has all the children.")]
     [SerializeField]
@@ -102,6 +103,7 @@ public class HandSummon : MonoBehaviour
             Debug.LogError("Unable to find tutorial bar game object. Tutorial tutorial bar will not show.");
         }
         tutorial.SetActive(false);
+        tutorialBar.SetActive(false);
 
         // ensure materials are defined
         if (!errorMaterial)
@@ -205,7 +207,7 @@ public class HandSummon : MonoBehaviour
             {
                 // and we haven't celebrated yet
                 if (!step2) { 
-                    Debug.Log("Summoning Item!");
+                    //Debug.Log("Summoning Item!");
                     SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
                     soundManager.QueSound(SFX.Sounds.Correct);
                     step1 = false;
@@ -242,7 +244,7 @@ public class HandSummon : MonoBehaviour
             {
                 //Debug.Log("FlashRedThenHide Done! ");
                 errorIndicationHappening = false;
-                //gameObject.GetComponent<MeshRenderer>().enabled = false;
+                HideTutorial();
             }
         }
 
@@ -263,7 +265,8 @@ public class HandSummon : MonoBehaviour
         instantiateIndicationHappening = true;
         //newMic.SetActive(true);
         ResetSummon(true);
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        HideTutorial();
+        //gameObject.GetComponent<MeshRenderer>().enabled = false;
         SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         soundManager.QueSound(SFX.Sounds.Correct);
     }
@@ -299,9 +302,18 @@ public class HandSummon : MonoBehaviour
 
     public void ShowTutorial()
     {
-        // TODO: Show stuff here.
         tutorial.SetActive(true);
+        tutorialBar.SetActive(true);
+        //tutorialBar.GetComponent<MeshRenderer>().enabled = true;
         tutorialBar.GetComponent<MeshRenderer>().material = okMaterial;
+    }
+
+    public void HideTutorial()
+    {
+        tutorialBar.GetComponent<MeshRenderer>().material = okMaterial; // in case it's in its error state
+        //tutorialBar.GetComponent<MeshRenderer>().enabled = false;
+        tutorial.SetActive(false);
+        tutorialBar.SetActive(false);
     }
 
     // kind of a utility class. Should probably put this somewhere with utils
