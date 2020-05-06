@@ -19,14 +19,21 @@ public class HandSummon : MonoBehaviour
     public XRBaseControllerInteractor l_hand;
     [Tooltip("Set automagically. Right hand controller game object. If empty it'll just look for a gameobject called 'RightHand Controller'")]
     public XRBaseControllerInteractor r_hand;
-    [Tooltip("Set automagically.")] [SerializeField]
+    [Tooltip("Set automagically.")] 
     private XRRig xrRig;
-    [Tooltip("The colliders that you must slide yours hands to, in order to summon")][SerializeField]
-    private List<Collider> endCapColliders = null;
-    [Tooltip("The intensity of the vibrations triggered with hand summoning")][SerializeField]
+    [Tooltip("The colliders that you must slide yours hands to, in order to summon")]
+    [SerializeField]
+    private List<Collider> endCapColliders;
+    [Tooltip("Set automagically. The game object to show when showing the tutorial. Has all the children.")]
+    [SerializeField]
+    private GameObject tutorial;
+    [Tooltip("Set automagically. The game object in the tutorial, which we change the material in.")]
+    [SerializeField]
+    private GameObject tutorialBar;
+    [Tooltip("The intensity of the vibrations triggered with hand summoning")]
     private float hapticIntensity = 0.2f;
-    [Tooltip("Duration for fading when stuff fades")][SerializeField]
-    float lerpDuration = 3f;
+    [Tooltip("Duration for fading when stuff fades")]
+    float lerpDuration = 0.5f;
 
     // used internally
     [SerializeField][Tooltip("Used internally. dont touch")]
@@ -79,6 +86,24 @@ public class HandSummon : MonoBehaviour
         {
             Debug.LogError("Error in HandSummon.cs: Unable to find hands. Either define them manually by dragging your controllers to the l_hand and r_hand fields in the inspector, or name them LeftHand Controller and RightHand Controller so I can find them automagically.");
         }
+        if (!tutorial)
+        {
+            tutorial = GameObject.Find("TutorialHands") ?? null;
+        }
+        if (!tutorial) 
+        {
+            Debug.LogError("Unable to find tutorial hands game object. Tutorial hands will not show.");
+        }
+        if (!tutorialBar)
+        {
+            tutorialBar = GameObject.Find("TutorialBar") ?? null;
+        }
+        if (!tutorialBar)
+        {
+            Debug.LogError("Unable to find tutorial bar game object. Tutorial tutorial bar will not show.");
+        }
+        tutorial.SetActive(false);
+        tutorialBar.SetActive(false);
 
         // ensure materials are defined
         if (!errorMaterial)
@@ -162,9 +187,7 @@ public class HandSummon : MonoBehaviour
                 SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
                 soundManager.QueSound(SFX.Sounds.Correct);
                 // show them the thingy so they have some kind of visible cue
-                gameObject.GetComponent<MeshRenderer>().enabled = true;
-                gameObject.GetComponent<MeshRenderer>().material = okMaterial;
-                //gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+                ShowTutorial();
                 step1 = true;   // first step is to get both hands in
             }
             if (HandsInsideBox()) {
@@ -173,11 +196,6 @@ public class HandSummon : MonoBehaviour
                 {
                     VibrateBothControllers(0.5f, 0.25f);
                 }
-                /* if (gameObject.GetComponent<MeshRenderer>().material != okMaterial)
-                {
-                    gameObject.GetComponent<MeshRenderer>().material = okMaterial;
-                }
-                */
             } else
             {
                 ResetSummon();
@@ -189,7 +207,7 @@ public class HandSummon : MonoBehaviour
             {
                 // and we haven't celebrated yet
                 if (!step2) { 
-                    Debug.Log("Summoning Item!");
+                    //Debug.Log("Summoning Item!");
                     SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
                     soundManager.QueSound(SFX.Sounds.Correct);
                     step1 = false;
@@ -216,7 +234,7 @@ public class HandSummon : MonoBehaviour
         if (errorIndicationHappening)
         {
             var progress = Time.time - lerpStart;
-            var renderer = GetComponent<MeshRenderer>();
+            var renderer = tutorialBar.GetComponent<MeshRenderer>();
             float newAlpha = Mathf.Lerp(lerpDuration, 0.0f, progress / lerpDuration);
             errorMaterial.color = new Color(errorMaterial.color.r, errorMaterial.color.g, errorMaterial.color.b, newAlpha);
             renderer.material = errorMaterial; 
@@ -226,7 +244,7 @@ public class HandSummon : MonoBehaviour
             {
                 //Debug.Log("FlashRedThenHide Done! ");
                 errorIndicationHappening = false;
-                //gameObject.GetComponent<MeshRenderer>().enabled = false;
+                HideTutorial();
             }
         }
 
@@ -247,7 +265,8 @@ public class HandSummon : MonoBehaviour
         instantiateIndicationHappening = true;
         //newMic.SetActive(true);
         ResetSummon(true);
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        HideTutorial();
+        //gameObject.GetComponent<MeshRenderer>().enabled = false;
         SoundManager soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         soundManager.QueSound(SFX.Sounds.Correct);
     }
@@ -279,6 +298,22 @@ public class HandSummon : MonoBehaviour
     {
         lerpStart = Time.time;
         instantiateIndicationHappening = true;
+    }
+
+    public void ShowTutorial()
+    {
+        tutorial.SetActive(true);
+        tutorialBar.SetActive(true);
+        //tutorialBar.GetComponent<MeshRenderer>().enabled = true;
+        tutorialBar.GetComponent<MeshRenderer>().material = okMaterial;
+    }
+
+    public void HideTutorial()
+    {
+        tutorialBar.GetComponent<MeshRenderer>().material = okMaterial; // in case it's in its error state
+        //tutorialBar.GetComponent<MeshRenderer>().enabled = false;
+        tutorial.SetActive(false);
+        tutorialBar.SetActive(false);
     }
 
     // kind of a utility class. Should probably put this somewhere with utils
