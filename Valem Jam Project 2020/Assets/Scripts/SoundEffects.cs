@@ -17,6 +17,6 @@ public class SoundEffects : MonoBehaviour
     public SFX.Sounds mumble1Sound;
     public SFX.Sounds mumble2Sound;
     public SFX.Sounds mumble3Sound;
-
+    public SFX.Sounds slateSound;
 
 }

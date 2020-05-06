@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cf902f430f62b6419dac79b52d4747f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupSound: 5
+  pickupSound: 9
   dropSound: 1
   activateSound: 2
   hoverSound: 4
@@ -477,6 +477,7 @@ MonoBehaviour:
   mumble1Sound: 0
   mumble2Sound: 0
   mumble3Sound: 0
+  slateSound: 0
 --- !u!4 &78693167 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4579067517879258, guid: aca95b7144ebd9d43b90bd779762e272, type: 3}
@@ -2057,6 +2058,7 @@ MonoBehaviour:
   Mumble2: {fileID: 8300000, guid: 2ae469736dc27bf4a8233a464c77b0ca, type: 3}
   Dialog3: {fileID: 0}
   Mumble3: {fileID: 8300000, guid: 3aa1c17d9765a094ca464de51f939920, type: 3}
+  Slate: {fileID: 8300000, guid: 1c12d09b14b7bcc48893ca1d1973a36f, type: 3}
 --- !u!4 &746747274
 Transform:
   m_ObjectHideFlags: 0
@@ -4071,6 +4073,7 @@ MonoBehaviour:
   mumble1Sound: 0
   mumble2Sound: 0
   mumble3Sound: 0
+  slateSound: 0
 --- !u!1 &1295473217
 GameObject:
   m_ObjectHideFlags: 0

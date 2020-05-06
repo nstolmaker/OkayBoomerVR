@@ -9,9 +9,9 @@ using System;
 public class SFX
 {
     public enum Sounds
-    {
+    {//%%%
         PickupMic, DropMic, Action, Cut, HoverGeneric, Correct,
-        Dialog1, Dialog2, Dialog3,
+        Dialog1, Dialog2, Dialog3, Slate,
         Mumble1, Mumble2, Mumble3
     };
 }
@@ -57,7 +57,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip Mumble2;
     public AudioClip Dialog3;
     public AudioClip Mumble3;
-
+    public AudioClip Slate;
 
     public void Start()
     {
@@ -123,6 +123,9 @@ public class SoundManager : MonoBehaviour
                 break;
             case SFX.Sounds.Mumble3:
                 clip = this.Mumble3;
+                break;
+            case SFX.Sounds.Slate:
+                clip = this.Slate;
                 break;
         }
         if (clip)
@@ -224,7 +227,7 @@ public class SoundManager : MonoBehaviour
             SFX.Sounds mumble1Sound = objectSFX.mumble1Sound;
             SFX.Sounds mumble2Sound = objectSFX.mumble2Sound;
             SFX.Sounds mumble3Sound = objectSFX.mumble3Sound;
-
+            SFX.Sounds slateSound = objectSFX.slateSound;
             // we are hovering, so play the hover sound.
             if (objectSFX != null)
             {
