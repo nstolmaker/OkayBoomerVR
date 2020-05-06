@@ -133,7 +133,7 @@ public class HandSummon : MonoBehaviour
             // a nice little Lambda so we can bind events in this script instead of having to split this script up even more.
             endcap.EndcapCollisionStart += (GameObject other) => {
                 //Debug.Log("EndcapCollisionStart triggered by: " + other.name);
-                switch (other.transform.parent.gameObject.name)
+                switch (other?.transform?.parent?.gameObject.name)
                 {
                     case "LeftHand Controller":
                         this.leftHandDone = true;
@@ -151,7 +151,7 @@ public class HandSummon : MonoBehaviour
             };
             endcap.EndcapCollisionEnd += (GameObject other) => {
                 Debug.Log("EndcapCollisionEnd triggered by: " + other.name);
-                switch (other.transform.parent.gameObject.name)
+                switch (other?.transform?.parent?.gameObject.name)
                 {
                     case "LeftHand Controller":
                         leftHandDone = false;
