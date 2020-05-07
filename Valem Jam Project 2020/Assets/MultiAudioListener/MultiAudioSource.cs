@@ -299,7 +299,6 @@ namespace Assets.MultiAudioListener
             }
         }
 
-        /*
         [SerializeField] private float _timePosition = 0f;
         public float TimePosition
         {
@@ -312,8 +311,7 @@ namespace Assets.MultiAudioListener
                     subAudioSource.Value.time = value;
                 }
             }
-        }
-        */
+        } 
 
         //Add custom curves when needed
 
@@ -404,6 +402,7 @@ namespace Assets.MultiAudioListener
                 MainMultiAudioListener.OnVirtualAudioListenerRemoved += VirtualAudioListenerRemoved;
 
                 //Play and start the play update
+                _safetyAudioSource.time = TimePosition; // *** Noah says: We might want to do this here, but i'm not sure because all the audioclips are Play() by default. If we have issues later, try this. Leaving it in for now since it doesn't seem to break anything.
                 _safetyAudioSource.Play();
                 bool hardwareChannelsLeft = _safetyAudioSource.isPlaying;
 
@@ -423,9 +422,12 @@ namespace Assets.MultiAudioListener
             else
             {
                 //The sound was still playing so we let is play again from start
+                // *** Noah says: I added the below code related to setting time, but haven't seen it trigger, so I'm commenting it out for now.
+                // *** _safetyAudioSource.time = TimePosition;
                 _safetyAudioSource.Play();
                 foreach (var audioSource in _subAudioSources)
                 {
+                    // *** audioSource.Value.time = TimePosition;
                     audioSource.Value.Play();
                 }
             }
@@ -502,6 +504,9 @@ namespace Assets.MultiAudioListener
             while (_safetyAudioSource.isPlaying || _isPaused||(_safetyAudioSource.loop&&_isPlaying))
             {
                 yield return null;
+
+                TimePosition = _safetyAudioSource.time; // *** Noah says: keep the timeposition up to date with what the child position is. Essential.
+
                 tryToRebootTimer -= Time.deltaTime;
                 bool shouldRebootAudio = tryToRebootTimer <= 0;
                 bool safetyWasRebooted = false;
@@ -636,8 +641,10 @@ namespace Assets.MultiAudioListener
 
             //We calculate and translate the local pos of the audio from the virtual listener to the main listener
             var localPos = virtualListener.transform.InverseTransformPoint(transform.position);
-            // *** I need to do something with scaling here because of prefabs. Switching to not using prefabs for now though, for tesitng purposes
-            //var localPos = virtualListener.transform.InverseTransformPoint(Vector3.Scale(transform.position, transform.lossyScale));
+            /* *** Noah says: I thought I had an issue here being caused by scaling, but i think it was just config problems. 
+               leaving this here though just in case. 
+               var localPos = virtualListener.transform.InverseTransformPoint(Vector3.Scale(transform.position, transform.lossyScale));
+            */
             subAudioSource.transform.position = MainMultiAudioListener.Main.transform.TransformPoint(localPos);
         }
 
@@ -714,7 +721,20 @@ namespace Assets.MultiAudioListener
             audioSource.rolloffMode = VolumeRolloff;
             audioSource.minDistance = MinDistance;
             audioSource.maxDistance = MaxDistance;
-            // audioSource.time = TimePosition;
+        }
+
+        /* *** Noah says: i added this so we can keep track of the position we are in the audio track and jump back and forth */
+        public void SetTimePosition(float newPosition)
+        {
+            TimePosition = newPosition;
+            //The sound was still playing so we let is play again from start
+            _safetyAudioSource.time = TimePosition;
+            _safetyAudioSource.Play();
+            foreach (var audioSource in _subAudioSources)
+            {
+                audioSource.Value.time = TimePosition;
+                audioSource.Value.Play();
+            }
         }
     }
 }
