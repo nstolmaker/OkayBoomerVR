@@ -422,8 +422,8 @@ namespace Assets.MultiAudioListener
             else
             {
                 //The sound was still playing so we let is play again from start
-                // *** Noah says: I added the below code related to setting time, but haven't seen it trigger, so I'm commenting it out for now.
-                // *** _safetyAudioSource.time = TimePosition;
+                // *** Noah says: I think this *should* always be zero when this happens, because the audio wasn't already playing. Not sure though.
+                _safetyAudioSource.time = TimePosition;
                 _safetyAudioSource.Play();
                 foreach (var audioSource in _subAudioSources)
                 {
