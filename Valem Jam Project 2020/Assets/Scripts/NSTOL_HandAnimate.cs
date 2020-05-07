@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using Unity.XR.Oculus;
+using UnityEngine.XR;
 using UnityEngine.UI;
 //using Normal.Realtime;
 
@@ -137,17 +137,17 @@ namespace UnityEngine.XR.Interaction.Toolkit
             }
 
             // Index (Pointer) Capacitive touch
-            if (controller.inputDevice.TryGetFeatureValue(OculusUsages.indexTouch, out bool indexTouch))  
-            {
-                if (indexTouch)
-                {
-                    handReducer.finger1 = 1;
-                    debugOutput += "Index (Pointer) Capacitive touch: " + indexTouch + "\n";
-                } else
-                {
-                    handReducer.finger1 = 0;
-                }
-            }
+            //if (controller.inputDevice.TryGetFeatureValue(CommonUsages.indexTouch, out bool indexTouch))  
+            //{
+            //    if (indexTouch)
+            //    {
+            //        handReducer.finger1 = 1;
+            //        debugOutput += "Index (Pointer) Capacitive touch: " + indexTouch + "\n";
+            //    } else
+            //    {
+            //        handReducer.finger1 = 0;
+            //    }
+            //}
 
             // Index (Pointer/Trigger) depressed 
             if (controller.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out float trigger))

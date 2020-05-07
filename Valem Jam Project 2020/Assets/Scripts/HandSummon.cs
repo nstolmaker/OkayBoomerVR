@@ -387,6 +387,4 @@ public class HandSummon : MonoBehaviour
         
         return gripsBeingHeld == 2;
     }
-     
-
 }
