@@ -264,7 +264,7 @@ public class SoundManager : MonoBehaviour
             {
                 if (item)
                 {
-                    //Debug.Log("onHoverEnter: " + item.gameObject.name);
+                    Debug.Log("onHoverEnter: " + item.gameObject.name);
                     QueSound(hoverSound);
                 }
                 else
