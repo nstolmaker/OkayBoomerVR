@@ -166,11 +166,10 @@ public class SoundManager : MonoBehaviour
                 if (charAudioSource.IsPlaying)
                 {
                     // TODO: Add this back in when we have a working setup. IMPORTANT, but i'm debugging right now.
-                    //float trackPosition = charAudioSource.TimePosition;
-                    //Debug.Log("SetCharacterAudio| already playing, so saving track position of " + trackPosition.ToString());
+                    float trackPosition = charAudioSource.TimePosition;
+                    //Debug.Log("SoundManager.cs | charAudioSource is already playing, so saving track position of " + trackPosition.ToString());
                     charAudioSource.AudioClip = resolvedAudioClip;
-                    //charAudioSource.TimePosition = trackPosition;
-                    Debug.Log("SoundManager.cs | charAudioSource is ALREADY Playing. Setting AudioClip and time position.");
+                    charAudioSource.SetTimePosition(trackPosition);
                 } else
                 {
                     // not playing, so just load it up and hit play.
