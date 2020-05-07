@@ -31,14 +31,7 @@ MonoBehaviour:
   m_AutomaticRunning: 0
   m_Loaders:
   - {fileID: 11400000, guid: 71fd7a772ac082f46ab068039f120c5b, type: 2}
-<<<<<<< HEAD
   - {fileID: 11400000, guid: b387e72900629ad4da48c0c370303b27, type: 2}
-=======
-<<<<<<< Updated upstream
-=======
-  - {fileID: 0}
->>>>>>> Stashed changes
->>>>>>> NathanStash
 --- !u!114 &-6721106985583380516
 MonoBehaviour:
   m_ObjectHideFlags: 0
