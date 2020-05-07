@@ -32,11 +32,8 @@ public class Mic : XRBaseInteractable
         interactable.onSelectEnter.AddListener(DidGetSelected);
         interactable.onSelectExit.AddListener(DidLoseSelected);
 
-        // we can't set references to an external component's function on a prefab, so we have to do this here.
-        interactable.onHoverEnter.RemoveListener(soundManager.ResolveInteractionSounds);
-        interactable.onHoverExit.RemoveListener(soundManager.ResolveInteractionSounds);
+        // we can't set references to an external component's function on a prefab, so we have to do this here. We just need hover, because on hover it binds the rest of the events automatically.
         interactable.onHoverEnter.AddListener(soundManager.ResolveInteractionSounds);
-        interactable.onHoverExit.AddListener(soundManager.ResolveInteractionSounds);
 
     }
 
@@ -45,10 +42,13 @@ public class Mic : XRBaseInteractable
         var controller = interactor.GetComponent<XRController>();
         XRBaseInteractable remote = interactor.selectTarget;
         isBeingHeld = true;
+        // this might be redundant with the onHover listener. Should test that.
+        soundManager.ResolveInteractionSounds(interactor);
     }
 
     public void DidLoseSelected(XRBaseInteractor interactor)
     {
         isBeingHeld = false;
+        soundManager.ResolveInteractionSounds(interactor);
     }
 }

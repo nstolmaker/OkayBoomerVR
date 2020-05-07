@@ -151,7 +151,7 @@ public class HandSummon : MonoBehaviour
                 
             };
             endcap.EndcapCollisionEnd += (GameObject other) => {
-                Debug.Log("EndcapCollisionEnd triggered by: " + other.name);
+                //Debug.Log("EndcapCollisionEnd triggered by: " + other.name);
                 switch (other?.transform?.parent?.gameObject.name)
                 {
                     case "LeftHand Controller":
