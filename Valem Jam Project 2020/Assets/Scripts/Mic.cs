@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class Mic : XRBaseInteractable
+public class Mic : MonoBehaviour
 {
     [Tooltip("Used internally to keep track of if this object is being held right now.")]
     public bool isBeingHeld = false;
@@ -27,10 +27,10 @@ public class Mic : XRBaseInteractable
         {
             interactable = GetComponent<XRGrabInteractable>();
         }
-        interactable.onSelectEnter.RemoveListener(DidGetSelected);
-        interactable.onSelectExit.RemoveListener(DidLoseSelected);
-        interactable.onSelectEnter.AddListener(DidGetSelected);
-        interactable.onSelectExit.AddListener(DidLoseSelected);
+        //interactable.onSelectEnter.RemoveListener(DidGetSelected);
+        //interactable.onSelectExit.RemoveListener(DidLoseSelected);
+        //interactable.onSelectEnter.AddListener(DidGetSelected);
+        //interactable.onSelectExit.AddListener(DidLoseSelected);
 
         // we can't set references to an external component's function on a prefab, so we have to do this here. We just need hover, because on hover it binds the rest of the events automatically.
         interactable.onHoverEnter.AddListener(soundManager.ResolveInteractionSounds);
