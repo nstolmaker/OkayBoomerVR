@@ -10,6 +10,8 @@ public class SoundConeManager : MonoBehaviour
     private GameObject collidingWith;
     [SerializeField][Tooltip("Set automagically.")]
     private bool inTheConeZone = false;
+    [Tooltip("Is set to true while the mic is in the cone zone, and the raycast is reporting that the mic is pointed at the talkytalky. Check this every frame, and you can get a picture of how well they've done.")]
+    public bool goal = false;
     [SerializeField][Tooltip("Set automagically.")]
     private Transform microphonePickup;
     [SerializeField][Tooltip("Set automagically.")]
@@ -77,6 +79,9 @@ public class SoundConeManager : MonoBehaviour
         if (inTheConeZone)
         {
             CheckIfRayCastHit();
+        } else
+        {
+            goal = false;
         }
     }
 
@@ -112,6 +117,11 @@ public class SoundConeManager : MonoBehaviour
                 {
                     //Debug.Log("Critical Hit!" + "Distance is: " + hit.distance);
                     PerfectPositionHit(microphonePickup.gameObject, hit.collider.gameObject);
+                    goal = true;
+                } else
+                {
+                    //Debug.Log("Not in the sweet spot.");
+                    goal = false;
                 }
             }
             }
@@ -133,6 +143,7 @@ public class SoundConeManager : MonoBehaviour
             }
         }
     }
+
 
 
 }

@@ -136,7 +136,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c3631f5e58749a59194e0cf6baf6d5, type: 3}
   m_Name: Standalone Providers
   m_EditorClassIdentifier: 
-  m_RequiresSettingsUpdate: 0
+  m_RequiresSettingsUpdate: 1
   m_AutomaticLoading: 0
   m_AutomaticRunning: 0
+<<<<<<< HEAD
   m_Loaders: []
+=======
+  m_Loaders:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 71fd7a772ac082f46ab068039f120c5b, type: 2}
+  - {fileID: 11400000, guid: 5d3d711ee068c314d842fd9d852c72bf, type: 2}
+  - {fileID: 0}
+>>>>>>> master
