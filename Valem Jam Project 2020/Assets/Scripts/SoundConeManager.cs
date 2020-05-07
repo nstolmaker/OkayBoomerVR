@@ -26,8 +26,8 @@ public class SoundConeManager : MonoBehaviour
     public float perfectDistance = 0.2f;
     [Tooltip("Critical hit is perfectDistance +/- perfectDistanceAllowedVariancePercent")]
     public float perfectDistanceAllowedVariancePercent = 0.1f;
-    [Tooltip("DEPRECATED. I should move this. (Tell us where the director is, so that we can make sounds come from him)")]
-    public GameObject director;
+    //[Tooltip("DEPRECATED. I should move this. (Tell us where the director is, so that we can make sounds come from him)")]
+    //public GameObject director;
     [Tooltip("The main audio track you'd like to play from this object")]
     public SFX.Sounds primaryAudioTrack;
     [Tooltip("The mumble track, to play when the object isnt properly mic'd")]
@@ -40,12 +40,10 @@ public class SoundConeManager : MonoBehaviour
         {
             talkyTalky = transform.parent.GetComponent<Transform>();
         }
-        if (director == null)
+        if (!talkyTalky)
         {
-            director = GameObject.Find("Director") ? GameObject.Find("Director") : null;
+            Debug.LogError("Error in SoundConeManager.cs | Unable to find talkyTalky object. It should be the parent of the ConeZone object, and it must have a transform.");
         }
-        Destroy(director.GetComponent<AudioSource>());
-        director.AddComponent<AudioSource>();
         if (soundManager == null)
         {
             soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>() ?? null;

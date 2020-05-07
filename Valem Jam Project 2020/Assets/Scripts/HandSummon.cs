@@ -21,9 +21,10 @@ public class HandSummon : MonoBehaviour
     public XRBaseControllerInteractor r_hand;
     [Tooltip("Set automagically.")] 
     private XRRig xrRig;
+#pragma warning disable 649
     [Tooltip("The colliders that you must slide yours hands to, in order to summon")]
-    [SerializeField]
-    private List<Collider> endCapColliders;
+    private List<Collider> endCapColliders = new List<Collider>();
+#pragma warning restore 649
     [Tooltip("Set automagically. The game object to show when showing the tutorial. Has all the children.")]
     [SerializeField]
     private GameObject tutorial;
@@ -116,7 +117,7 @@ public class HandSummon : MonoBehaviour
         }
 
         // make sure there are endCapColliders
-        if (endCapColliders.Count == 0)
+        if (endCapColliders.Count < 2)
         {
             //Debug.Log("No endcap colliders defined, so looking for and adding the expected ones by name 'EndCapLeft' and 'EndCapRight'");
             endCapColliders.Add(GameObject.Find("EndCapLeft").GetComponent<BoxCollider>());
@@ -133,7 +134,7 @@ public class HandSummon : MonoBehaviour
             // a nice little Lambda so we can bind events in this script instead of having to split this script up even more.
             endcap.EndcapCollisionStart += (GameObject other) => {
                 //Debug.Log("EndcapCollisionStart triggered by: " + other.name);
-                switch (other.transform.parent.gameObject.name)
+                switch (other?.transform?.parent?.gameObject.name)
                 {
                     case "LeftHand Controller":
                         this.leftHandDone = true;
@@ -150,8 +151,8 @@ public class HandSummon : MonoBehaviour
                 
             };
             endcap.EndcapCollisionEnd += (GameObject other) => {
-                Debug.Log("EndcapCollisionEnd triggered by: " + other.name);
-                switch (other.transform.parent.gameObject.name)
+                //Debug.Log("EndcapCollisionEnd triggered by: " + other.name);
+                switch (other?.transform?.parent?.gameObject.name)
                 {
                     case "LeftHand Controller":
                         leftHandDone = false;
