@@ -983,6 +983,9 @@ MonoBehaviour:
   Dialog3: {fileID: 8300000, guid: dc98c5e3679f2b641abcee150484630c, type: 3}
   Mumble3: {fileID: 8300000, guid: 3aa1c17d9765a094ca464de51f939920, type: 3}
   Slate: {fileID: 8300000, guid: 1c12d09b14b7bcc48893ca1d1973a36f, type: 3}
+  Dialog4: {fileID: 0}
+  Dialog5: {fileID: 0}
+  Dialog6: {fileID: 0}
 --- !u!1 &9131216694010957868
 GameObject:
   m_ObjectHideFlags: 0
