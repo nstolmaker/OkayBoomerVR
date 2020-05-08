@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class StartTutorialAndMainScene : MonoBehaviour
 {
     public GameObject buttonForStarting;
-    public GameObject tutorialTimeline;
+    public PlayableDirector tutorialTimeline;
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -19,11 +19,9 @@ public class StartTutorialAndMainScene : MonoBehaviour
        
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void StartTimelineForTutorialDirector()
     {
-        if (collision.gameObject.CompareTag("ControllerGeometry"))
-        {
-            tutorialTimeline.SetActive(true);
-        }
+        Debug.Log("Your mum");
+        tutorialTimeline.Play();
     }
 }
