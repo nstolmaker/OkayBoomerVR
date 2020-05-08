@@ -65,7 +65,6 @@ public class SoundManager : MonoBehaviour
         {
             //Debug.Log("Iterating over defined chars and settings ids: " + i);
             characters[i].charID = i;
-            characters[i].Mumble(); // start mumbling here, otherwise if the object starts itself sometimes it happens before it has an index and errors.
         }
     }
 
@@ -158,7 +157,7 @@ public class SoundManager : MonoBehaviour
                     //charAudioSource.SpatialBlend = 1; // needed for normal AudioSource but not necessary for MultiAudioSource, it's the default and only supported mode.
                     charAudioSource.Spread = 212;
                     charAudioSource.VolumeRolloff = AudioRolloffMode.Logarithmic; // cant set this to custom with scripting, so i guess we'll have to make sure we make these manually.
-                    charAudioSource.Play();
+                   // charAudioSource.Play();
                     Debug.LogWarning("WARNING: Creating a new audio source with Logarithmic rollof on gameobject (" + characters[charID].talkyTalky.gameObject.name + ") because there isnt one. However, we cant set the volume rollOf mode in code, so you're better of making an audioSource on the talkyTalky yourself. ");
                 }
                 // set the audio Clip the defined clip.
@@ -172,7 +171,7 @@ public class SoundManager : MonoBehaviour
                     charAudioSource.SetTimePosition(trackPosition);
                 } else
                 {
-                    // not playing, so just load it up and hit play.
+                    // not playing, so just load it up and (dont) hit play.
                     charAudioSource.AudioClip = resolvedAudioClip;
                     Debug.Log("SoundManager.cs | charAudioSource is Not Playing. Setting AudioClip and hitting play");
                     charAudioSource.Play();
