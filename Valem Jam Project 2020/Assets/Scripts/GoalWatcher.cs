@@ -75,6 +75,7 @@ public class GoalWatcher : MonoBehaviour
     public void StartWatching()
     {
         totalSamples = 0;
+        sampleValues = new List<int>();
         watch = true;
     }
 
