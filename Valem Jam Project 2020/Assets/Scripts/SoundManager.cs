@@ -13,7 +13,8 @@ public class SFX
     {//%%%
         PickupMic, DropMic, Action, Cut, HoverGeneric, Correct,
         Dialog1, Dialog2, Dialog3, Slate,
-        Mumble1, Mumble2, Mumble3
+        Mumble1, Mumble2, Mumble3, Dialog4, 
+        Dialog5, Dialog6
     };
 }
 public class SoundManager : MonoBehaviour
@@ -57,7 +58,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip Dialog3;
     public AudioClip Mumble3;
     public AudioClip Slate;
-
+    public AudioClip Dialog4;
+    public AudioClip Dialog5;
+    public AudioClip Dialog6;
     public void Start()
     {
         // set the ids for characters that were defined
@@ -65,7 +68,6 @@ public class SoundManager : MonoBehaviour
         {
             //Debug.Log("Iterating over defined chars and settings ids: " + i);
             characters[i].charID = i;
-            characters[i].Mumble(); // start mumbling here, otherwise if the object starts itself sometimes it happens before it has an index and errors.
         }
     }
 
@@ -126,6 +128,15 @@ public class SoundManager : MonoBehaviour
             case SFX.Sounds.Slate:
                 clip = this.Slate;
                 break;
+            case SFX.Sounds.Dialog4:
+                clip = this.Dialog4;
+                break;
+            case SFX.Sounds.Dialog5:
+                clip = this.Dialog5;
+                break;
+            case SFX.Sounds.Dialog6:
+                clip = this.Dialog6;
+                break;
         }
         if (clip)
         {
@@ -158,7 +169,7 @@ public class SoundManager : MonoBehaviour
                     //charAudioSource.SpatialBlend = 1; // needed for normal AudioSource but not necessary for MultiAudioSource, it's the default and only supported mode.
                     charAudioSource.Spread = 212;
                     charAudioSource.VolumeRolloff = AudioRolloffMode.Logarithmic; // cant set this to custom with scripting, so i guess we'll have to make sure we make these manually.
-                    charAudioSource.Play();
+                   // charAudioSource.Play();
                     Debug.LogWarning("WARNING: Creating a new audio source with Logarithmic rollof on gameobject (" + characters[charID].talkyTalky.gameObject.name + ") because there isnt one. However, we cant set the volume rollOf mode in code, so you're better of making an audioSource on the talkyTalky yourself. ");
                 }
                 // set the audio Clip the defined clip.
@@ -172,7 +183,7 @@ public class SoundManager : MonoBehaviour
                     charAudioSource.SetTimePosition(trackPosition);
                 } else
                 {
-                    // not playing, so just load it up and hit play.
+                    // not playing, so just load it up and (dont) hit play.
                     charAudioSource.AudioClip = resolvedAudioClip;
                     Debug.Log("SoundManager.cs | charAudioSource is Not Playing. Setting AudioClip and hitting play");
                     charAudioSource.Play();
@@ -233,6 +244,9 @@ public class SoundManager : MonoBehaviour
             SFX.Sounds mumble2Sound = objectSFX.mumble2Sound;
             SFX.Sounds mumble3Sound = objectSFX.mumble3Sound;
             SFX.Sounds slateSound = objectSFX.slateSound;
+            SFX.Sounds Dialog4 = objectSFX.Dialog4;
+            SFX.Sounds Dialog5 = objectSFX.Dialog5;
+            SFX.Sounds Dialog6 = objectSFX.Dialog6;
             // we are hovering, so play the hover sound.
             if (objectSFX != null)
             {
