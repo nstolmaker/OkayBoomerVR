@@ -13,7 +13,8 @@ public class SFX
     {//%%%
         PickupMic, DropMic, Action, Cut, HoverGeneric, Correct,
         Dialog1, Dialog2, Dialog3, Slate,
-        Mumble1, Mumble2, Mumble3
+        Mumble1, Mumble2, Mumble3, Dialog4, 
+        Dialog5, Dialog6
     };
 }
 public class SoundManager : MonoBehaviour
@@ -57,7 +58,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip Dialog3;
     public AudioClip Mumble3;
     public AudioClip Slate;
-
+    public AudioClip Dialog4;
+    public AudioClip Dialog5;
+    public AudioClip Dialog6;
     public void Start()
     {
         // set the ids for characters that were defined
@@ -125,6 +128,15 @@ public class SoundManager : MonoBehaviour
                 break;
             case SFX.Sounds.Slate:
                 clip = this.Slate;
+                break;
+            case SFX.Sounds.Dialog4:
+                clip = this.Dialog4;
+                break;
+            case SFX.Sounds.Dialog5:
+                clip = this.Dialog5;
+                break;
+            case SFX.Sounds.Dialog6:
+                clip = this.Dialog6;
                 break;
         }
         if (clip)
@@ -233,6 +245,9 @@ public class SoundManager : MonoBehaviour
             SFX.Sounds mumble2Sound = objectSFX.mumble2Sound;
             SFX.Sounds mumble3Sound = objectSFX.mumble3Sound;
             SFX.Sounds slateSound = objectSFX.slateSound;
+            SFX.Sounds Dialog4 = objectSFX.Dialog4;
+            SFX.Sounds Dialog5 = objectSFX.Dialog5;
+            SFX.Sounds Dialog6 = objectSFX.Dialog6;
             // we are hovering, so play the hover sound.
             if (objectSFX != null)
             {
