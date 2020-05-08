@@ -8,6 +8,7 @@ public class TempGameManager : MonoBehaviour
     public GoalWatcher goalWatcher;
     private float internalClock;
 
+
     void Start()
     {
         if (!goalWatcher)
@@ -38,4 +39,5 @@ public class TempGameManager : MonoBehaviour
         goalWatcher.StopWatching();
         Debug.Log("Your score was: " + goalWatcher.GetGoalsPercent());
     }
+
 }
