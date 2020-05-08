@@ -10,6 +10,7 @@ public class GoalWatcher : MonoBehaviour
     public int totalGoals;
     [Tooltip("Read Only. Updated constantly to reflect the state of the goals.")]
     public int goalsRightNow;
+    public bool watch = false;
     
 
     void Start()
@@ -25,28 +26,32 @@ public class GoalWatcher : MonoBehaviour
     // feels like a good place to do this. I donno if we're using FixedUpdate anywhere so far, but if not, then we could scale this to 1 second to break down our percentage that way. Or, just change it back to update and use math(s).
     void FixedUpdate()
     {
-        // check all the goals to see what the state is.
-        int goalCounter = 0;
-        for (int i = 0; i < goalConeZones.Count; i++)
+        if (watch)
         {
-            if (goalConeZones[i].charID == null)
+            // check all the goals to see what the state is.
+            int goalCounter = 0;
+            for (int i = 0; i < goalConeZones.Count; i++)
             {
-                Debug.LogError("GoalWatcher | Unable to read charID of goalConeZone. Fix the script execution order and this should go away.");
+                if (goalConeZones[i].charID == 111)
+                {
+                    Debug.LogError("GoalWatcher | Unable to read charID of goalConeZone. Fix the script execution order and this should go away.");
+                }
+                var charID = goalConeZones[i].charID;   // charID and i should be the same. But, those get set by the SoundManager script, so if this script runs first then it might not work
+                var goalState = goalConeZones[i].goal;
+                Debug.Log("Iterating over defined goals and checking values. Goal #" + charID + ": " + goalState);
+                if (goalState)
+                {
+                    // they're in the sweet spot here.
+                    goalCounter++;
+                }
+                else
+                {
+                    // they'r really stinking it up. How are they so bad at our amazing game??
+                }
             }
-            var charID = goalConeZones[i].charID;   // charID and i should be the same. But, those get set by the SoundManager script, so if this script runs first then it might not work
-            var goalState = goalConeZones[i].goal;
-            Debug.Log("Iterating over defined goals and checking values. Goal #" + charID + ": " + goalState);
-            if (goalState)
-            {
-                // they're in the sweet spot here.
-                goalCounter++;
-            } else
-            {
-                // they'r really stinking it up. How are they so bad at our amazing game??
-            }
+            goalsRightNow = goalCounter;
+            Debug.Log("Goal percent: " + GetGoalsPercent().ToString());
         }
-        goalsRightNow = goalCounter;
-        Debug.Log("Goal percent: " + GetGoalsPercent().ToString());
     }
 
     public float GetGoalsPercent()
