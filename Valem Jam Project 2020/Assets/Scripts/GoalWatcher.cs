@@ -11,6 +11,8 @@ public class GoalWatcher : MonoBehaviour
     [Tooltip("Read Only. Updated constantly to reflect the state of the goals.")]
     public int goalsRightNow;
     public bool watch = false;
+    public int totalSamples = 0;
+    public List<int> sampleValues = new List<int>();
     
 
     void Start()
@@ -38,7 +40,7 @@ public class GoalWatcher : MonoBehaviour
                 }
                 var charID = goalConeZones[i].charID;   // charID and i should be the same. But, those get set by the SoundManager script, so if this script runs first then it might not work
                 var goalState = goalConeZones[i].goal;
-                Debug.Log("Iterating over defined goals and checking values. Goal #" + charID + ": " + goalState);
+                //Debug.Log("Iterating over defined goals and checking values. Goal #" + charID + ": " + goalState);
                 if (goalState)
                 {
                     // they're in the sweet spot here.
@@ -49,13 +51,36 @@ public class GoalWatcher : MonoBehaviour
                     // they'r really stinking it up. How are they so bad at our amazing game??
                 }
             }
+            totalSamples++;
+            sampleValues.Add(goalCounter);
             goalsRightNow = goalCounter;
-            Debug.Log("Goal percent: " + GetGoalsPercent().ToString());
+            //Debug.Log("Goal percent: " + GetGoalsPercent().ToString());
         }
     }
 
     public float GetGoalsPercent()
     {
-        return Mathf.Round(((float)goalsRightNow / (float)totalGoals) * 100f) / 100f;
+        int individualSample;
+        float goalPercent = 0f;
+        float allGoalPercent = 0f;
+        for (int i = 0; i < totalSamples; i++)
+        {
+            individualSample = sampleValues[i];
+            goalPercent = Mathf.Round(((float)individualSample / (float)totalGoals) * 100f) / 100f;
+            allGoalPercent += goalPercent;
+        }
+        return allGoalPercent / totalSamples;
+    }
+
+    public void StartWatching()
+    {
+        totalSamples = 0;
+        sampleValues = new List<int>();
+        watch = true;
+    }
+
+    public void StopWatching()
+    {
+        watch = false;
     }
 }

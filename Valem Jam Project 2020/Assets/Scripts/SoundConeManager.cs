@@ -60,9 +60,6 @@ public class SoundConeManager : MonoBehaviour
         // the ideal position should be in the center of the waveform cone (ConeZone), pointing at the sound generator (TalkyTalky)
         // we just need to draw a triangle between these three points, and then look at the angles.
         // Scratch that, that's too much work, let's just compare the transform distance between the talkyTalky and the mic.
-        microphonePickup = collidingWith.transform;
-        // NOTE: We could add rotation here as well, but at the moment I think we only care about rotation along two of the three axis, and also it might be too hard.
-        rayFromMic = new Ray(microphonePickup.position, microphonePickup.forward);
         inTheConeZone = true;
         PlayPrimaryAudio(); // switches the audio track to the correct one.
 
@@ -102,14 +99,19 @@ public class SoundConeManager : MonoBehaviour
     public void CheckIfRayCastHit()
     {
         //Debug.Log("CheckIfRayCastHit running...");
+        microphonePickup = collidingWith.transform;
+        // NOTE: We could add rotation here as well, but at the moment I think we only care about rotation along two of the three axis, and also it might be too hard.
+        rayFromMic = new Ray(microphonePickup.position, microphonePickup.forward);
         RaycastHit hit;
             if (Physics.Raycast(rayFromMic, out hit))
             {
-            //Debug.DrawRay(centerOfTheMic.position, centerOfTheMic.forward, Color.blue, 5);
+#if UNITY_EDITOR
+            Debug.DrawRay(microphonePickup.position, microphonePickup.forward, Color.green, 5);
+#endif
             if (hit.collider.gameObject.name == talkyTalky.gameObject.name)
             {
                 //Debug.Log("Hitting: " + hit.collider.gameObject.name + ". Looking for: " + talkyTalky.gameObject.name + "; Distance is: " + hit.distance);
-                //Debug.DrawRay(centerOfTheMic.position, centerOfTheMic.forward, Color.red, 5);
+                //Debug.DrawRay(microphonePickup.position, microphonePickup.forward, Color.red, 5);
                 // let's see how far away it is, and compute the floor and ceiling for our sweet-spot. Give them a reward if they hit it.
                 var perfectDistanceMin = perfectDistance + (-1 * perfectDistanceAllowedVariancePercent);
                 var perfectDistanceMax = perfectDistance + (1 * perfectDistanceAllowedVariancePercent);
