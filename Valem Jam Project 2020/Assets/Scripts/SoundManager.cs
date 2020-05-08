@@ -69,6 +69,8 @@ public class SoundManager : MonoBehaviour
             //Debug.Log("Iterating over defined chars and settings ids: " + i);
             characters[i].charID = i;
         }
+
+        soundEffectDebounceLastTime = 0f;
     }
 
     /* 
