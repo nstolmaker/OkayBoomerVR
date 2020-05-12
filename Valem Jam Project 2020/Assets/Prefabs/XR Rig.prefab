@@ -986,30 +986,36 @@ MonoBehaviour:
   Dialog4: {fileID: 0}
   Dialog5: {fileID: 0}
   Dialog6: {fileID: 0}
-  DirectorIntro: {fileID: 0}
-  DirectorScene1: {fileID: 0}
-  DirectorScene2: {fileID: 0}
-  DirectorScene3: {fileID: 0}
+  DirectorIntro: {fileID: 8300000, guid: 9951cdf18d8771e49a1d9daa20e9e798, type: 3}
+  DirectorScene1: {fileID: 8300000, guid: 14e6c5e5dc6cb4b43af84881372fc8aa, type: 3}
+  DirectorScene2: {fileID: 8300000, guid: 76b974bd3aabc23428f16dca4742de0d, type: 3}
+  DirectorScene3: {fileID: 8300000, guid: e42db5e2d8c25e940a1678f285aa2af0, type: 3}
   DirectorScene3_1: {fileID: 0}
-  Ernie1: {fileID: 0}
-  Ernie2: {fileID: 0}
-  Ernie1Mumble: {fileID: 0}
-  Ernie2Mumble: {fileID: 0}
+  Ernie1: {fileID: 8300000, guid: 708de5d7004e6884f9f6a9f85269c721, type: 3}
+  Ernie2: {fileID: 8300000, guid: ad813c2c56bee2f4ebd78f2f1895391a, type: 3}
+  Ernie1Mumble: {fileID: 8300000, guid: 4b35ea72db1b2d5418faeb8e0db639b7, type: 3}
+  Ernie2Mumble: {fileID: 8300000, guid: 4b35ea72db1b2d5418faeb8e0db639b7, type: 3}
   BigPapa1: {fileID: 0}
-  Hanz1: {fileID: 0}
-  SrgtRose: {fileID: 0}
-  SrgtRoseMumble: {fileID: 0}
-  Cooper1: {fileID: 0}
-  Jason1: {fileID: 0}
-  SrgtRose2: {fileID: 0}
-  Cooper1Mumble: {fileID: 0}
-  Jason1Mumble: {fileID: 0}
-  SrgtRose2Mumble: {fileID: 0}
-  Hanz1Mumble: {fileID: 0}
-  Hanz2: {fileID: 0}
-  Hanz2Mumble: {fileID: 0}
-  Ernie3: {fileID: 0}
-  Ernie3Mumble: {fileID: 0}
+  Hanz1: {fileID: 8300000, guid: e89bdf47c772ad843b2ba4ea71e8304f, type: 3}
+  SrgtRose: {fileID: 8300000, guid: 193520e869defc149b99985afceef751, type: 3}
+  SrgtRoseMumble: {fileID: 8300000, guid: 77163fb1ccafd3743b966d0b15fba06d, type: 3}
+  Cooper1: {fileID: 8300000, guid: 55a4a20918722c846b58652e61f2e6a4, type: 3}
+  Jason1: {fileID: 8300000, guid: 0d8dc2b119a04ac4a8c9c88515370cab, type: 3}
+  SrgtRose2: {fileID: 8300000, guid: 3a6c2aa697ca4124e960b22dae2bc194, type: 3}
+  Cooper1Mumble: {fileID: 8300000, guid: b7e9ae89ead442e42b58ede1797873cf, type: 3}
+  Jason1Mumble: {fileID: 8300000, guid: 01640c4c09d47b24b87310b724a60f07, type: 3}
+  SrgtRose2Mumble: {fileID: 8300000, guid: 5b331c6b074d84c429289c78b2cb5ef9, type: 3}
+  Hanz1Mumble: {fileID: 8300000, guid: d9f95d73811c4a544a80a29fce2700ac, type: 3}
+  Hanz2: {fileID: 8300000, guid: 45826bc0685709a4b90356ca7227a63d, type: 3}
+  Hanz2Mumble: {fileID: 8300000, guid: d9f95d73811c4a544a80a29fce2700ac, type: 3}
+  Ernie3: {fileID: 8300000, guid: 1f88dedba83cbcc43b6a593690d8f0f6, type: 3}
+  Ernie3Mumble: {fileID: 8300000, guid: fddb6474581b6d549b34a92ff9bef03b, type: 3}
+  DirectorFail1: {fileID: 8300000, guid: a7b00958c126c1b4598cdfdd4f53439f, type: 3}
+  DirectorFail2: {fileID: 8300000, guid: 5da1ee6bdb7d8424fbfd8252adad59dc, type: 3}
+  DirectorFail3: {fileID: 8300000, guid: b329d49e8d5bc464fb10fcd47301edb9, type: 3}
+  DirectorFail4: {fileID: 8300000, guid: affe2f4ca42546b4aa53730fa2a1dabc, type: 3}
+  DirectorSuccess1: {fileID: 8300000, guid: 841ad4b7ac0206640a57fa668228fea8, type: 3}
+  DirectorSuccess2: {fileID: 8300000, guid: 5b946c2a363a7b34f916ef772b4a31ed, type: 3}
 --- !u!1 &9131216694010957868
 GameObject:
   m_ObjectHideFlags: 0

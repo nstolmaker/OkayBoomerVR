@@ -45,6 +45,12 @@ public class SoundEffects : MonoBehaviour
     public SFX.Sounds hanz2Mumble;
     public SFX.Sounds ernie3;
     public SFX.Sounds ernie3Mumble;
+    public SFX.Sounds directorFail1;
+    public SFX.Sounds directorFail2;
+    public SFX.Sounds directorFail3;
+    public SFX.Sounds directorFail4;
+    public SFX.Sounds directorSuccess1;
+    public SFX.Sounds directorSuccess2;
 
 
 }

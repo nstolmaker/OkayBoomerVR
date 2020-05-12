@@ -27,13 +27,20 @@ public class Mic : MonoBehaviour
         {
             interactable = GetComponent<XRGrabInteractable>();
         }
-        interactable.onSelectEnter.RemoveListener(DidGetSelected);
-        interactable.onSelectExit.RemoveListener(DidLoseSelected);
-        interactable.onSelectEnter.AddListener(DidGetSelected);
-        interactable.onSelectExit.AddListener(DidLoseSelected);
+        if (interactable)
+        {
 
-        // we can't set references to an external component's function on a prefab, so we have to do this here. We just need hover, because on hover it binds the rest of the events automatically.
-        interactable.onHoverEnter.AddListener(soundManager.ResolveInteractionSounds);
+            interactable.onSelectEnter.RemoveListener(DidGetSelected);
+            interactable.onSelectExit.RemoveListener(DidLoseSelected);
+            interactable.onSelectEnter.AddListener(DidGetSelected);
+            interactable.onSelectExit.AddListener(DidLoseSelected);
+
+            // we can't set references to an external component's function on a prefab, so we have to do this here. We just need hover, because on hover it binds the rest of the events automatically.
+            interactable.onHoverEnter.AddListener(soundManager.ResolveInteractionSounds);
+        } else
+        {
+            Debug.Log("Prepared non-interactable mic. Probably this is what you intended, but you won't be able to move this mic or interact with it.");
+        }
 
     }
 

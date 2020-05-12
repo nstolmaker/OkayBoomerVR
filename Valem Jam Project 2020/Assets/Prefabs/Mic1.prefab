@@ -435,7 +435,7 @@ MonoBehaviour:
   pickupSound: 0
   dropSound: 1
   activateSound: 2
-  hoverSound: 9
+  hoverSound: 4
   correctSound: 5
   dialog1Sound: 0
   dialog2Sound: 0
@@ -447,6 +447,30 @@ MonoBehaviour:
   Dialog4: 0
   Dialog5: 0
   Dialog6: 0
+  directorIntro: 0
+  bigPapa1: 0
+  hanz1: 0
+  directorScene1: 0
+  directorScene2: 0
+  directorScene3: 0
+  directorScene3_1: 0
+  srgtRose: 0
+  srgtMumble: 0
+  ernie1: 0
+  ernie1Mumble: 0
+  ernie2: 0
+  ernie2Mumble: 0
+  cooper1: 0
+  cooper1Mumble: 0
+  jason1: 0
+  jason1Mumble: 0
+  srgtRose2: 0
+  srgtRose2Mumble: 0
+  hanz1Mumble: 0
+  hanz2: 0
+  hanz2Mumble: 0
+  ernie3: 0
+  ernie3Mumble: 0
 --- !u!114 &4047580062160402733
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -23,7 +23,8 @@ public class SFX
         Cooper1, Jason1, SrgtRose2,
         Cooper1Mumble, Jason1Mumble, SrgtRose2Mumble,
         Hanz1Mumble, Hanz2, Hanz2Mumble,
-        Ernie3, Ernie3Mumble
+        Ernie3, Ernie3Mumble,
+        DirectorFail1, DirectorFail2, DirectorFail3, DirectorFail4, DirectorSuccess1, DirectorSuccess2
     };
 }
 public class SoundManager : MonoBehaviour
@@ -94,7 +95,12 @@ public class SoundManager : MonoBehaviour
     public AudioClip Hanz2Mumble;
     public AudioClip Ernie3;
     public AudioClip Ernie3Mumble;
-
+    public AudioClip DirectorFail1;
+    public AudioClip DirectorFail2;
+    public AudioClip DirectorFail3;
+    public AudioClip DirectorFail4;
+    public AudioClip DirectorSuccess1;
+    public AudioClip DirectorSuccess2;
 
     public void Start()
     {
@@ -246,6 +252,24 @@ public class SoundManager : MonoBehaviour
             case SFX.Sounds.Ernie3Mumble:
                 clip = this.Ernie3Mumble;
                 break;
+            case SFX.Sounds.DirectorFail1:
+                clip = this.DirectorFail1;
+                break;
+            case SFX.Sounds.DirectorFail2:
+                clip = this.DirectorFail2;
+                break;
+            case SFX.Sounds.DirectorFail3:
+                clip = this.DirectorFail3;
+                break;
+            case SFX.Sounds.DirectorFail4:
+                clip = this.DirectorFail4;
+                break;
+            case SFX.Sounds.DirectorSuccess1:
+                clip = this.DirectorSuccess1;
+                break;
+            case SFX.Sounds.DirectorSuccess2:
+                clip = this.DirectorSuccess2;
+                break;
 
         }
         if (clip)
@@ -379,6 +403,12 @@ public class SoundManager : MonoBehaviour
             SFX.Sounds hanz2Mumble = objectSFX.hanz2Mumble;
             SFX.Sounds ernie3 = objectSFX.ernie3;
             SFX.Sounds ernie3Mumble = objectSFX.ernie3Mumble;
+            SFX.Sounds directorFail1 = objectSFX.directorFail1;
+            SFX.Sounds directorFail2 = objectSFX.directorFail2;
+            SFX.Sounds directorFail3 = objectSFX.directorFail3;
+            SFX.Sounds directorFail4 = objectSFX.directorFail4;
+            SFX.Sounds directorSuccess1 = objectSFX.directorSuccess1;
+            SFX.Sounds directorSuccess2 = objectSFX.directorSuccess2;
 
 
 

@@ -11,11 +11,16 @@ public class TempGameManager : MonoBehaviour
     public SoundManager soundManager;
     [Tooltip("The CharacterAudioSetup. Will look for a game object called 'CharacterAudioSetup' if this is left empty")]
     public CharacterAudioSetup characterAudioSetup;
+    [Tooltip("The HandSummon. Will look for a game object called 'SummonManager' if this is left empty")]
+    public HandSummon handSummon;
     [SerializeField]
     public int lengthOfTrack = 26;
-    private float internalClock;
+    [SerializeField]
+    public int showTutorialHandsAtTime = 6;
+    public float internalClock;
+    public float gameTimestamp;
 
-    void Start()
+    void Awake()
     {
         if (!goalWatcher)
         {
@@ -41,26 +46,41 @@ public class TempGameManager : MonoBehaviour
         {
             Debug.LogError("Error in TempGameManager | Unable to find the characterAudioSetup. This breaks the sound timeline feature.");
         }
+        if (!handSummon)
+        {
+            handSummon = GameObject.Find("SummonManager").GetComponent<HandSummon>();
+        }
+        if (!handSummon)
+        {
+            Debug.LogError("Error in TempGameManager | Unable to find the SummonManager. This breaks the demo of hand summoning, and people might not know how to do it!");
+        }
 
+    }
+
+    void Start()
+    {
         internalClock = Time.time;
         characterAudioSetup.StartAllCharacterAudioTracks();
     }
-
     
     void FixedUpdate()
     {
-        if ((Time.time - internalClock) == lengthOfTrack)
+        gameTimestamp = (float)System.Math.Floor(Time.time - internalClock);
+
+        if (gameTimestamp == lengthOfTrack)
         {
             Debug.Log(lengthOfTrack+" seconds are up.");
             SceneManager.LoadScene(1);
-
-
-            //} else if ((Time.time - internalClock) == 20)
-            //{
-            //    Debug.Log("20 seconds are up.");
-            //goalWatcher.StartWatching();
-            //   SceneEnd();
         }
+        else if (gameTimestamp == showTutorialHandsAtTime)
+        {
+            handSummon.ShowTutorial();
+        }
+        else if (gameTimestamp == showTutorialHandsAtTime + 3)
+        {
+            handSummon.HideTutorial();
+        }
+        
     }
 
     public void SceneEnd()

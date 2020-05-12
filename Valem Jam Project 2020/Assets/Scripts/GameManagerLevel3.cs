@@ -82,11 +82,11 @@ public class GameManagerLevel3 : MonoBehaviour
                 // they did alright, let them know and move them on to the next scene
                 nextSceneID = 0;
                 Debug.Log("You won!");
-                soundManager.SetCharacterAudio(0, SFX.Sounds.Correct);
+                soundManager.SetCharacterAudio(0, SFX.Sounds.DirectorSuccess1);
             } else
             {
                 // they did terribly, yell at them and reload the scene
-                soundManager.SetCharacterAudio(0, SFX.Sounds.Cut);
+                soundManager.SetCharacterAudio(0, SFX.Sounds.DirectorFail3);
                 internalClock = Time.time;
                 nextSceneID = 0; // send them back to the beginning. If we want to reload the level, we have to reset the timeline and do some other stuff i think. // SceneManager.GetActiveScene().buildIndex;
             }

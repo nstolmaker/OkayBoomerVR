@@ -474,13 +474,31 @@ MonoBehaviour:
   hanz1: 0
   directorScene1: 0
   directorScene2: 0
-  directorScene2_1: 0
+  directorScene3: 0
+  directorScene3_1: 0
   srgtRose: 0
   srgtMumble: 0
   ernie1: 0
   ernie1Mumble: 0
   ernie2: 0
   ernie2Mumble: 0
+  cooper1: 0
+  cooper1Mumble: 0
+  jason1: 0
+  jason1Mumble: 0
+  srgtRose2: 0
+  srgtRose2Mumble: 0
+  hanz1Mumble: 0
+  hanz2: 0
+  hanz2Mumble: 0
+  ernie3: 0
+  ernie3Mumble: 0
+  directorFail1: 0
+  directorFail2: 0
+  directorFail3: 0
+  directorFail4: 0
+  directorSuccess1: 0
+  directorSuccess2: 0
 --- !u!4 &78693167 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4579067517879258, guid: aca95b7144ebd9d43b90bd779762e272, type: 3}
@@ -1418,11 +1436,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4263058374328494445, guid: 6d6726bb01ef65b47bff3eb5a278b46f, type: 3}
       propertyPath: primaryAudioTrack
-      value: 22
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 4263058374328494445, guid: 6d6726bb01ef65b47bff3eb5a278b46f, type: 3}
       propertyPath: mumbleAudioTrack
-      value: 23
+      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d6726bb01ef65b47bff3eb5a278b46f, type: 3}
@@ -3363,7 +3381,7 @@ MonoBehaviour:
   startSrgtTrackAt: 15
   cutAt: 49
   gameTimestamp: 0
-  nextSceneID: 1
+  nextSceneID: 2
   goToNextSceneAt: 60
 --- !u!4 &1778523420
 Transform:
@@ -3581,6 +3599,10 @@ PrefabInstance:
       propertyPath: _playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4263058373612061827, guid: 6d6726bb01ef65b47bff3eb5a278b46f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4263058373612061836, guid: 6d6726bb01ef65b47bff3eb5a278b46f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.022
@@ -3635,11 +3657,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4263058374328494445, guid: 6d6726bb01ef65b47bff3eb5a278b46f, type: 3}
       propertyPath: primaryAudioTrack
-      value: 20
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 4263058374328494445, guid: 6d6726bb01ef65b47bff3eb5a278b46f, type: 3}
       propertyPath: mumbleAudioTrack
-      value: 21
+      value: 24
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d6726bb01ef65b47bff3eb5a278b46f, type: 3}

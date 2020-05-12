@@ -19,7 +19,7 @@ public class GameManagerLevel1 : MonoBehaviour
     public int cutAt = 50;
     private float internalClock;
     public float gameTimestamp;
-    public int nextSceneID = 1;
+    public int nextSceneID = 2;
     public int goToNextSceneAt = 60;
 
     void Start()
@@ -83,12 +83,12 @@ public class GameManagerLevel1 : MonoBehaviour
             {
                 // they did alright, let them know and move them on to the next scene
                 nextSceneID = 2;
-                soundManager.SetCharacterAudio(2, SFX.Sounds.Correct);
+                soundManager.SetCharacterAudio(2, SFX.Sounds.DirectorSuccess1);
             } else
             {
                 // they did terribly, yell at them and reload the scene
-                soundManager.SetCharacterAudio(2, SFX.Sounds.Cut);
-                nextSceneID = SceneManager.GetActiveScene().buildIndex;
+                soundManager.SetCharacterAudio(2, SFX.Sounds.DirectorFail1);
+                nextSceneID = 0;
             }
             
         }
