@@ -16,9 +16,14 @@ public class SFX
         Mumble1, Mumble2, Mumble3, Dialog4, 
         Dialog5, Dialog6, DirectorIntro,
         DirectorScene1,
-        DirectorScene2, DirectorScene2_1,
+        DirectorScene2,
+        DirectorScene3, DirectorScene3_1,
         Ernie1, Ernie1Mumble, SrgtRose, SrgtRoseMumble,
-        Ernie2, Ernie2Mumble, BigPapa1, Hanz1
+        Ernie2, Ernie2Mumble, BigPapa1, Hanz1,
+        Cooper1, Jason1, SrgtRose2,
+        Cooper1Mumble, Jason1Mumble, SrgtRose2Mumble,
+        Hanz1Mumble, Hanz2, Hanz2Mumble,
+        Ernie3, Ernie3Mumble
     };
 }
 public class SoundManager : MonoBehaviour
@@ -68,7 +73,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip DirectorIntro;
     public AudioClip DirectorScene1;
     public AudioClip DirectorScene2;
-    public AudioClip DirectorScene2_1;
+    public AudioClip DirectorScene3;
+    public AudioClip DirectorScene3_1;
     public AudioClip Ernie1;
     public AudioClip Ernie2;
     public AudioClip Ernie1Mumble;
@@ -77,6 +83,17 @@ public class SoundManager : MonoBehaviour
     public AudioClip Hanz1;
     public AudioClip SrgtRose;
     public AudioClip SrgtRoseMumble;
+    public AudioClip Cooper1;
+    public AudioClip Jason1;
+    public AudioClip SrgtRose2;
+    public AudioClip Cooper1Mumble;
+    public AudioClip Jason1Mumble;
+    public AudioClip SrgtRose2Mumble;
+    public AudioClip Hanz1Mumble;
+    public AudioClip Hanz2;
+    public AudioClip Hanz2Mumble;
+    public AudioClip Ernie3;
+    public AudioClip Ernie3Mumble;
 
 
     public void Start()
@@ -163,11 +180,14 @@ public class SoundManager : MonoBehaviour
             case SFX.Sounds.DirectorScene2:
                 clip = this.DirectorScene2;
                 break;
+            case SFX.Sounds.DirectorScene3:
+                clip = this.DirectorScene3;
+                break;
             case SFX.Sounds.DirectorScene1:
                 clip = this.DirectorScene1;
                 break;
-            case SFX.Sounds.DirectorScene2_1:
-                clip = this.DirectorScene2_1;
+            case SFX.Sounds.DirectorScene3_1:
+                clip = this.DirectorScene3_1;
                 break;
             case SFX.Sounds.Ernie1:
                 clip = this.Ernie1;
@@ -192,6 +212,39 @@ public class SoundManager : MonoBehaviour
                 break;
             case SFX.Sounds.Hanz1:
                 clip = this.Hanz1;
+                break;
+            case SFX.Sounds.Cooper1:
+                clip = this.Cooper1;
+                break;
+            case SFX.Sounds.Cooper1Mumble:
+                clip = this.Cooper1Mumble;
+                break;
+            case SFX.Sounds.Jason1:
+                clip = this.Jason1;
+                break;
+            case SFX.Sounds.Jason1Mumble:
+                clip = this.Jason1Mumble;
+                break;
+            case SFX.Sounds.SrgtRose2:
+                clip = this.SrgtRose2;
+                break;
+            case SFX.Sounds.SrgtRose2Mumble:
+                clip = this.SrgtRose2Mumble;
+                break;
+            case SFX.Sounds.Hanz1Mumble:
+                clip = this.Hanz1Mumble;
+                break;
+            case SFX.Sounds.Hanz2:
+                clip = this.Hanz2;
+                break;
+            case SFX.Sounds.Hanz2Mumble:
+                clip = this.Hanz2Mumble;
+                break;
+            case SFX.Sounds.Ernie3:
+                clip = this.Ernie3;
+                break;
+            case SFX.Sounds.Ernie3Mumble:
+                clip = this.Ernie3Mumble;
                 break;
 
         }
@@ -307,13 +360,25 @@ public class SoundManager : MonoBehaviour
             SFX.Sounds directorIntro = objectSFX.directorIntro;
             SFX.Sounds directorScene1 = objectSFX.directorScene1;
             SFX.Sounds directorScene2 = objectSFX.directorScene2;
-            SFX.Sounds directorScene2_1 = objectSFX.directorScene2_1;
+            SFX.Sounds directorScene3 = objectSFX.directorScene3;
+            SFX.Sounds directorScene3_1 = objectSFX.directorScene3_1;
             SFX.Sounds ernie1 = objectSFX.ernie1;
             SFX.Sounds ernie2 = objectSFX.ernie2;
             SFX.Sounds bigPapa1 = objectSFX.bigPapa1;
             SFX.Sounds hanz1 = objectSFX.hanz1;
             SFX.Sounds srgtRose = objectSFX.srgtRose;
             SFX.Sounds srgtRoseMumble = objectSFX.srgtMumble;
+            SFX.Sounds cooper1 = objectSFX.cooper1;
+            SFX.Sounds cooper1Mumble = objectSFX.cooper1Mumble;
+            SFX.Sounds jason1 = objectSFX.jason1;
+            SFX.Sounds jason1Mumble = objectSFX.jason1Mumble;
+            SFX.Sounds srgtRose2 = objectSFX.srgtRose2;
+            SFX.Sounds srgtRose2Mumble = objectSFX.srgtRose2Mumble;
+            SFX.Sounds hanz1Mumble = objectSFX.hanz1Mumble;
+            SFX.Sounds hanz2 = objectSFX.hanz2;
+            SFX.Sounds hanz2Mumble = objectSFX.hanz2Mumble;
+            SFX.Sounds ernie3 = objectSFX.ernie3;
+            SFX.Sounds ernie3Mumble = objectSFX.ernie3Mumble;
 
 
 

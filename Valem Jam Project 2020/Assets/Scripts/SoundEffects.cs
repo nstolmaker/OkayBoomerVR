@@ -26,12 +26,25 @@ public class SoundEffects : MonoBehaviour
     public SFX.Sounds hanz1;
     public SFX.Sounds directorScene1;
     public SFX.Sounds directorScene2;
-    public SFX.Sounds directorScene2_1;
+    public SFX.Sounds directorScene3;
+    public SFX.Sounds directorScene3_1;
     public SFX.Sounds srgtRose;
     public SFX.Sounds srgtMumble;
     public SFX.Sounds ernie1;
     public SFX.Sounds ernie1Mumble;
     public SFX.Sounds ernie2;
     public SFX.Sounds ernie2Mumble;
+    public SFX.Sounds cooper1;
+    public SFX.Sounds cooper1Mumble;
+    public SFX.Sounds jason1;
+    public SFX.Sounds jason1Mumble;
+    public SFX.Sounds srgtRose2;
+    public SFX.Sounds srgtRose2Mumble;
+    public SFX.Sounds hanz1Mumble;
+    public SFX.Sounds hanz2;
+    public SFX.Sounds hanz2Mumble;
+    public SFX.Sounds ernie3;
+    public SFX.Sounds ernie3Mumble;
+
 
 }
