@@ -21,5 +21,6 @@ public class SoundEffects : MonoBehaviour
     public SFX.Sounds Dialog4;
     public SFX.Sounds Dialog5;
     public SFX.Sounds Dialog6;
+    public SFX.Sounds directorIntro;
 
 }

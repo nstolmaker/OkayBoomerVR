@@ -986,6 +986,7 @@ MonoBehaviour:
   Dialog4: {fileID: 0}
   Dialog5: {fileID: 0}
   Dialog6: {fileID: 0}
+  DirectorIntro: {fileID: 0}
 --- !u!1 &9131216694010957868
 GameObject:
   m_ObjectHideFlags: 0

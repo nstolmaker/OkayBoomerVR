@@ -32,7 +32,7 @@ public class CharacterAudioSetup : MonoBehaviour
         {
             Debug.LogError("Error in CharacterAudioSetup | No characterAudioTracks specified. Character audio won't work.");
         }
-        StartAllCharacterAudioTracks();
+        //StartAllCharacterAudioTracks();
     }
  
     public void StartAllCharacterAudioTracks()
