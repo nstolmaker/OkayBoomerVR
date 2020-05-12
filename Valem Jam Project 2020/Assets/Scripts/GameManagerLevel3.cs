@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Playables;
 
 public class GameManagerLevel3 : MonoBehaviour
 {
@@ -12,9 +13,17 @@ public class GameManagerLevel3 : MonoBehaviour
     [Tooltip("The CharacterAudioSetup. Will look for a game object called 'CharacterAudioSetup' if this is left empty")]
     public CharacterAudioSetup characterAudioSetup;
     [SerializeField]
-    public int startWatchingGoalsAfterNSeconds = 15;
+    public int startWatchingGoalsAfterNSeconds = 14;
+    [SerializeField]
     public int stopWatchingGoalsAfterNSeconds = 75;
+    [SerializeField]
+    public int cutAt = 76;
     private float internalClock;
+    public float gameTimestamp;
+    [SerializeField]
+    public int nextSceneID = 3;
+    [SerializeField]
+    public int goToNextSceneAt = 80;
 
     void Start()
     {
@@ -47,20 +56,46 @@ public class GameManagerLevel3 : MonoBehaviour
         characterAudioSetup.StartAllCharacterAudioTracks();
     }
 
+
     
     void FixedUpdate()
     {
+        gameTimestamp = Time.time - internalClock;
         if ((Time.time - internalClock) == startWatchingGoalsAfterNSeconds)
         {
             Debug.Log(startWatchingGoalsAfterNSeconds + " seconds are up.");
-            //SceneManager.LoadScene(1);
-
             goalWatcher.StartWatching();
+            PlayableDirector timeline = GameObject.Find("TimelineDataMeeting").GetComponent<PlayableDirector>();
+            timeline.Play();
 
-        } else if ((Time.time - internalClock) == stopWatchingGoalsAfterNSeconds)
+        }
+        else if ((Time.time - internalClock) == stopWatchingGoalsAfterNSeconds)
         {
-            Debug.Log(stopWatchingGoalsAfterNSeconds+" seconds are up.");
+            Debug.Log(stopWatchingGoalsAfterNSeconds + " seconds are up.");
             SceneEnd();
+        } 
+        else if ((Time.time - internalClock) == cutAt)
+        {
+            // this id is based on the sequence which the ConeZone's are specified in the SoundManager. So if you change the order of them, you might have to re-set this ID number. Not the best solution, but it's fine for now.
+            if (goalWatcher.GetGoalsPercent() > 0.50)
+            {
+                // they did alright, let them know and move them on to the next scene
+                nextSceneID = 0;
+                Debug.Log("You won!");
+                soundManager.SetCharacterAudio(0, SFX.Sounds.Correct);
+            } else
+            {
+                // they did terribly, yell at them and reload the scene
+                soundManager.SetCharacterAudio(0, SFX.Sounds.Cut);
+                internalClock = Time.time;
+                nextSceneID = 0; // send them back to the beginning. If we want to reload the level, we have to reset the timeline and do some other stuff i think. // SceneManager.GetActiveScene().buildIndex;
+            }
+            
+        }
+        else if ((Time.time - internalClock) == goToNextSceneAt)
+        {
+            //goToNextSceneAt
+            SceneManager.LoadScene(nextSceneID);
         }
     }
 
