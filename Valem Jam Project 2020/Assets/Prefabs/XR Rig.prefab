@@ -987,6 +987,17 @@ MonoBehaviour:
   Dialog5: {fileID: 0}
   Dialog6: {fileID: 0}
   DirectorIntro: {fileID: 0}
+  DirectorScene1: {fileID: 0}
+  DirectorScene2: {fileID: 0}
+  DirectorScene2_1: {fileID: 0}
+  Ernie1: {fileID: 0}
+  Ernie2: {fileID: 0}
+  Ernie1Mumble: {fileID: 0}
+  Ernie2Mumble: {fileID: 0}
+  BigPapa1: {fileID: 0}
+  Hanz1: {fileID: 0}
+  SrgtRose: {fileID: 0}
+  SrgtRoseMumble: {fileID: 0}
 --- !u!1 &9131216694010957868
 GameObject:
   m_ObjectHideFlags: 0

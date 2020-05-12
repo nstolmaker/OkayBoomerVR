@@ -22,5 +22,16 @@ public class SoundEffects : MonoBehaviour
     public SFX.Sounds Dialog5;
     public SFX.Sounds Dialog6;
     public SFX.Sounds directorIntro;
+    public SFX.Sounds bigPapa1;
+    public SFX.Sounds hanz1;
+    public SFX.Sounds directorScene1;
+    public SFX.Sounds directorScene2;
+    public SFX.Sounds directorScene2_1;
+    public SFX.Sounds srgtRose;
+    public SFX.Sounds srgtMumble;
+    public SFX.Sounds ernie1;
+    public SFX.Sounds ernie1Mumble;
+    public SFX.Sounds ernie2;
+    public SFX.Sounds ernie2Mumble;
 
 }

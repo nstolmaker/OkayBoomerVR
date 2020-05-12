@@ -14,7 +14,11 @@ public class SFX
         PickupMic, DropMic, Action, Cut, HoverGeneric, Correct,
         Dialog1, Dialog2, Dialog3, Slate,
         Mumble1, Mumble2, Mumble3, Dialog4, 
-        Dialog5, Dialog6, DirectorIntro
+        Dialog5, Dialog6, DirectorIntro,
+        DirectorScene1,
+        DirectorScene2, DirectorScene2_1,
+        Ernie1, Ernie1Mumble, SrgtRose, SrgtRoseMumble,
+        Ernie2, Ernie2Mumble, BigPapa1, Hanz1
     };
 }
 public class SoundManager : MonoBehaviour
@@ -62,6 +66,19 @@ public class SoundManager : MonoBehaviour
     public AudioClip Dialog5;
     public AudioClip Dialog6;
     public AudioClip DirectorIntro;
+    public AudioClip DirectorScene1;
+    public AudioClip DirectorScene2;
+    public AudioClip DirectorScene2_1;
+    public AudioClip Ernie1;
+    public AudioClip Ernie2;
+    public AudioClip Ernie1Mumble;
+    public AudioClip Ernie2Mumble;
+    public AudioClip BigPapa1;
+    public AudioClip Hanz1;
+    public AudioClip SrgtRose;
+    public AudioClip SrgtRoseMumble;
+
+
     public void Start()
     {
         // set the ids for characters that were defined
@@ -143,6 +160,40 @@ public class SoundManager : MonoBehaviour
             case SFX.Sounds.DirectorIntro:
                 clip = this.DirectorIntro;
                 break;
+            case SFX.Sounds.DirectorScene2:
+                clip = this.DirectorScene2;
+                break;
+            case SFX.Sounds.DirectorScene1:
+                clip = this.DirectorScene1;
+                break;
+            case SFX.Sounds.DirectorScene2_1:
+                clip = this.DirectorScene2_1;
+                break;
+            case SFX.Sounds.Ernie1:
+                clip = this.Ernie1;
+                break;
+            case SFX.Sounds.Ernie2:
+                clip = this.Ernie2;
+                break;
+            case SFX.Sounds.Ernie1Mumble:
+                clip = this.Ernie1Mumble;
+                break;
+            case SFX.Sounds.Ernie2Mumble:
+                clip = this.Ernie2Mumble;
+                break;
+            case SFX.Sounds.SrgtRoseMumble:
+                clip = this.SrgtRoseMumble;
+                break;
+            case SFX.Sounds.SrgtRose:
+                clip = this.SrgtRose;
+                break;
+            case SFX.Sounds.BigPapa1:
+                clip = this.BigPapa1;
+                break;
+            case SFX.Sounds.Hanz1:
+                clip = this.Hanz1;
+                break;
+
         }
         if (clip)
         {
@@ -254,6 +305,18 @@ public class SoundManager : MonoBehaviour
             SFX.Sounds Dialog5 = objectSFX.Dialog5;
             SFX.Sounds Dialog6 = objectSFX.Dialog6;
             SFX.Sounds directorIntro = objectSFX.directorIntro;
+            SFX.Sounds directorScene1 = objectSFX.directorScene1;
+            SFX.Sounds directorScene2 = objectSFX.directorScene2;
+            SFX.Sounds directorScene2_1 = objectSFX.directorScene2_1;
+            SFX.Sounds ernie1 = objectSFX.ernie1;
+            SFX.Sounds ernie2 = objectSFX.ernie2;
+            SFX.Sounds bigPapa1 = objectSFX.bigPapa1;
+            SFX.Sounds hanz1 = objectSFX.hanz1;
+            SFX.Sounds srgtRose = objectSFX.srgtRose;
+            SFX.Sounds srgtRoseMumble = objectSFX.srgtMumble;
+
+
+
             // we are hovering, so play the hover sound.
             if (objectSFX != null)
             {

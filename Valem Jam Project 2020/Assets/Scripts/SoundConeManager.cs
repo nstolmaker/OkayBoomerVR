@@ -117,7 +117,7 @@ public class SoundConeManager : MonoBehaviour
                 var perfectDistanceMax = perfectDistance + (1 * perfectDistanceAllowedVariancePercent);
                 if (hit.distance > perfectDistanceMin && hit.distance < perfectDistanceMax)
                 {
-                    //Debug.Log("Critical Hit!" + "Distance is: " + hit.distance);
+                    Debug.Log("Critical Hit!" + "Distance is: " + hit.distance);
                     PerfectPositionHit(microphonePickup.gameObject, hit.collider.gameObject);
                     goal = true;
                 } else
