@@ -259,7 +259,7 @@ public class HandSummon : MonoBehaviour
     public void WarpInNewObject(string objectName)
     {
         Debug.Log("Warping in new one!");
-        UnityEngine.Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Mic1.prefab", typeof(GameObject));
+        Object prefab = Resources.Load("Mic1", typeof(GameObject));
         var rotationForHands = Quaternion.Euler(90f, l_hand.transform.rotation.eulerAngles.y, 70f);
         var positionForHands = r_hand.transform.position;
         GameObject newMic = Instantiate(prefab, positionForHands, rotationForHands) as GameObject;

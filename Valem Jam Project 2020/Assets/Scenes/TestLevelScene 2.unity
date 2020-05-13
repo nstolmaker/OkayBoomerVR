@@ -3372,8 +3372,8 @@ MonoBehaviour:
   stopWatchingGoalsAfterNSeconds: 53
   cutAt: 55
   gameTimestamp: 0
-  nextSceneID: 2
-  goToNextSceneAt: 60
+  nextSceneID: 3
+  goToNextSceneAt: 62
 --- !u!4 &562420773
 Transform:
   m_ObjectHideFlags: 0
@@ -4703,7 +4703,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1024860913751546, guid: 194f8fbf67729fd40936b3465af2cc47, type: 3}
       propertyPath: m_Name
-      value: Big Papa
+      value: Hanz
       objectReference: {fileID: 0}
     - target: {fileID: 1024860913751546, guid: 194f8fbf67729fd40936b3465af2cc47, type: 3}
       propertyPath: m_IsActive
@@ -11943,9 +11943,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1203258291065378, guid: 538090c735358e94db8b3f02fda66106, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1486181402090170, guid: 538090c735358e94db8b3f02fda66106, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1706748202644132, guid: 538090c735358e94db8b3f02fda66106, type: 3}
       propertyPath: m_Name
-      value: Hanz
+      value: El Papa Probably
+      objectReference: {fileID: 0}
+    - target: {fileID: 1762126598787930, guid: 538090c735358e94db8b3f02fda66106, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1827432851230130, guid: 538090c735358e94db8b3f02fda66106, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4607911127939526, guid: 538090c735358e94db8b3f02fda66106, type: 3}
       propertyPath: m_LocalPosition.x

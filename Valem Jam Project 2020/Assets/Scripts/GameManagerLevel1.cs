@@ -56,27 +56,28 @@ public class GameManagerLevel1 : MonoBehaviour
     
     void FixedUpdate()
     {
-        gameTimestamp = Time.time - internalClock;
-        if ((Time.time - internalClock) == startWatchingGoalsAfterNSeconds)
+        gameTimestamp = (float)System.Math.Floor(Time.time - internalClock);
+
+            if ((Time.time - internalClock) == startWatchingGoalsAfterNSeconds)
         {
             Debug.Log(startWatchingGoalsAfterNSeconds + " seconds are up.");
             goalWatcher.StartWatching();
 
         }
-        else if ((Time.time - internalClock) == stopWatchingGoalsAfterNSeconds)
+        else if (gameTimestamp == stopWatchingGoalsAfterNSeconds)
         {
             Debug.Log(stopWatchingGoalsAfterNSeconds + " seconds are up.");
             SceneEnd();
         }
-        else if ((Time.time - internalClock) == startErnieTrackAt)
+        else if (gameTimestamp == startErnieTrackAt)
         {
             //startErnieTrackAt
         }
-        else if ((Time.time - internalClock) == startSrgtTrackAt)
+        else if (gameTimestamp == startSrgtTrackAt)
         {
             //startSrgtTrackAt
         }
-        else if ((Time.time - internalClock) == cutAt)
+        else if (gameTimestamp == cutAt)
         {
             // this id is based on the sequence which the ConeZone's are specified in the SoundManager. So if you change the order of them, you might have to re-set this ID number. Not the best solution, but it's fine for now.
             if (goalWatcher.GetGoalsPercent() > 0.50)
@@ -88,7 +89,7 @@ public class GameManagerLevel1 : MonoBehaviour
             {
                 // they did terribly, yell at them and reload the scene
                 soundManager.SetCharacterAudio(2, SFX.Sounds.DirectorFail1);
-                nextSceneID = 0;
+                nextSceneID = SceneManager.GetActiveScene().buildIndex;
             }
             
         }

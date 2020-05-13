@@ -20,7 +20,7 @@ public class GameManagerLevel2 : MonoBehaviour
     private float internalClock;
     public float gameTimestamp;
     [SerializeField]
-    public int nextSceneID = 3;
+    public int nextSceneID = 2;
     [SerializeField]
     public int goToNextSceneAt = 80;
 
@@ -59,36 +59,39 @@ public class GameManagerLevel2 : MonoBehaviour
     
     void FixedUpdate()
     {
-        gameTimestamp = Time.time - internalClock;
-        if ((Time.time - internalClock) == startWatchingGoalsAfterNSeconds)
+        gameTimestamp = (float)System.Math.Floor(Time.time - internalClock);
+         
+        if (gameTimestamp == startWatchingGoalsAfterNSeconds)
         {
             Debug.Log(startWatchingGoalsAfterNSeconds + " seconds are up.");
             goalWatcher.StartWatching();
 
         }
-        else if ((Time.time - internalClock) == stopWatchingGoalsAfterNSeconds)
+        else if (gameTimestamp == stopWatchingGoalsAfterNSeconds)
         {
             Debug.Log(stopWatchingGoalsAfterNSeconds + " seconds are up.");
             SceneEnd();
         } 
-        else if ((Time.time - internalClock) == cutAt)
+        else if (gameTimestamp == cutAt)
         {
+            Debug.Log("End of scene. CUUUUUT!");
             // this id is based on the sequence which the ConeZone's are specified in the SoundManager. So if you change the order of them, you might have to re-set this ID number. Not the best solution, but it's fine for now.
             if (goalWatcher.GetGoalsPercent() > 0.50)
             {
+                Debug.Log("They did well. Advance to scene: " + nextSceneID);
                 // they did alright, let them know and move them on to the next scene
-                nextSceneID = 3;
+                //nextSceneID = 2 ;
                 soundManager.SetCharacterAudio(0, SFX.Sounds.DirectorSuccess2);
             } else
             {
                 // they did terribly, yell at them and reload the scene
-                soundManager.SetCharacterAudio(0, SFX.Sounds.DirectorFail2);
-                internalClock = Time.time;
-                nextSceneID = 0; // send them back to the beginning. If we want to reload the level, we have to reset the timeline and do some other stuff i think. // SceneManager.GetActiveScene().buildIndex;
+                soundManager.SetCharacterAudio(0, SFX.Sounds.DirectorFail2); 
+                nextSceneID = SceneManager.GetActiveScene().buildIndex;
+                Debug.Log("They did poorly. Setting nextSceneID to this scene: " + nextSceneID);
             }
             
         }
-        else if ((Time.time - internalClock) == goToNextSceneAt)
+        else if (gameTimestamp == goToNextSceneAt)
         {
             //goToNextSceneAt
             SceneManager.LoadScene(nextSceneID);
