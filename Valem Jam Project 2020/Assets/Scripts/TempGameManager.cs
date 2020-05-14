@@ -76,10 +76,10 @@ public class TempGameManager : MonoBehaviour
         {
             handSummon.ShowTutorial();
         }
-        else if (gameTimestamp == showTutorialHandsAtTime + 3)
+        /* else if (gameTimestamp == showTutorialHandsAtTime + 3)
         {
             handSummon.HideTutorial();
-        }
+        } */
         
     }
 

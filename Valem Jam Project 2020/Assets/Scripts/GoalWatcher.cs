@@ -76,11 +76,11 @@ public class GoalWatcher : MonoBehaviour
     {
         totalSamples = 0;
         sampleValues = new List<int>();
-        watch = true;
+        this.watch = true;
     }
 
     public void StopWatching()
     {
-        watch = false;
+        this.watch = false;
     }
 }
