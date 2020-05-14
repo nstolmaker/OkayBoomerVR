@@ -1,4 +1,9 @@
 # OkayBoomerVR - Made for ValemVRJam2020
+
+Be a boom mic operator! A good one, or a bad one, or an... okay one!
+
+![OkayBoomerVR Gameplay](Screenshots/gameplay.gif)
+
 ## Credits: 
 **Noah (me!)**: Programming, interaction
 
