@@ -24,6 +24,7 @@ public class GameManagerLevel3 : MonoBehaviour
     public int nextSceneID = 3;
     [SerializeField]
     public int goToNextSceneAt = 80;
+    public PlayableDirector timeline;
 
     void Start()
     {
@@ -54,6 +55,15 @@ public class GameManagerLevel3 : MonoBehaviour
 
         internalClock = Time.time;
         characterAudioSetup.StartAllCharacterAudioTracks();
+        PlayableDirector timeline = GameObject.Find("TimelineDataMeeting").GetComponent<PlayableDirector>();
+        if (!timeline)
+        {
+            Debug.LogError("Error in GameManagerLevel3. No timeline found. This is bad, go fix it.");
+        } else
+        {
+            timeline.Play();
+            timeline.Pause();
+        }
     }
 
 
@@ -65,8 +75,7 @@ public class GameManagerLevel3 : MonoBehaviour
         {
             Debug.Log(startWatchingGoalsAfterNSeconds + " seconds are up.");
             goalWatcher.StartWatching();
-            PlayableDirector timeline = GameObject.Find("TimelineDataMeeting").GetComponent<PlayableDirector>();
-            timeline.Play();
+            timeline.Resume();
 
         }
         else if (gameTimestamp == stopWatchingGoalsAfterNSeconds)

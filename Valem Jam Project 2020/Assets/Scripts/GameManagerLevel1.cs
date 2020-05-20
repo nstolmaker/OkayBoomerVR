@@ -21,6 +21,7 @@ public class GameManagerLevel1 : MonoBehaviour
     public float gameTimestamp;
     public int nextSceneID = 2;
     public int goToNextSceneAt = 60;
+    public List<Animator> animators;
 
     void Start()
     {
@@ -48,12 +49,26 @@ public class GameManagerLevel1 : MonoBehaviour
         {
             Debug.LogError("Error in TempGameManager | Unable to find the characterAudioSetup. This breaks the sound timeline feature.");
         }
-
+        if (animators.Count == 0)
+        {
+            Debug.LogError("GameManagerLevel1.cs couldn't find animators -- this will prevent animations from working");
+        }
         internalClock = Time.time;
         characterAudioSetup.StartAllCharacterAudioTracks();
+
+
     }
 
     
+    public void StartAnimations()
+    {
+        Debug.Log("Starting animations for items listed in animators");
+        foreach (Animator anim in animators)
+        {
+            anim.SetBool("Action", true);
+        }
+    }
+
     void FixedUpdate()
     {
         gameTimestamp = (float)System.Math.Floor(Time.time - internalClock);
@@ -76,6 +91,7 @@ public class GameManagerLevel1 : MonoBehaviour
         else if (gameTimestamp == startSrgtTrackAt)
         {
             //startSrgtTrackAt
+            StartAnimations();
         }
         else if (gameTimestamp == cutAt)
         {
